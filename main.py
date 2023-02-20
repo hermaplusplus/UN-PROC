@@ -15,8 +15,8 @@ SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202)] #[discord.Object(id=342787099407155202), discord.Object(id=829009897638068254)]
-PROD = False
+PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=829009897638068254)]
+PROD = True
 
 class Client(discord.Client):
 
