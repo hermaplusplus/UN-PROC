@@ -59,7 +59,8 @@ async def ckey(interaction: discord.Interaction, ckey: str):
             await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
             return
         embs = []
-        emb = discord.Embed(title=playerData['key'])
+        #emb = discord.Embed(title=playerData['key'])
+        emb = discord.Embed()
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         embs.append(emb)
