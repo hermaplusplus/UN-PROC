@@ -7,13 +7,15 @@ from typing import Optional
 
 from datetime import datetime
 
+import time
+
 import json
 
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=829009897638068254)]
+PRIORITY_GUILDS = [discord.Object(id=342787099407155202)] #[discord.Object(id=342787099407155202), discord.Object(id=829009897638068254)]
 PROD = False
 
 class Client(discord.Client):
@@ -59,7 +61,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
         embs = []
         emb = discord.Embed(title=playerData['key'])
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="Account Creation Date", value=f"<t:{utils.time_snowflake(datetime.strptime(playerData['joined'], '%Y-%M-%D'))}:d> (<t:{utils.time_snowflake(datetime.strptime(playerData['joined'], '%Y-%M-%D'))}:R>)", inline=True)
+        emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         embs.append(emb)
         await interaction.response.send_message(embeds=embs, ephemeral=True)
     else:
@@ -88,7 +90,7 @@ async def on_app_command_error(interaction, error):
     if isinstance(error, app_commands.MissingAnyRole):
         await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
     else:
-        await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
+        #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
         raise error
 
 client.run(SETTINGS['TOKEN'])
