@@ -69,7 +69,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
-                emb.add_field(name="CCDB Bans", value=f"`No bans found on CCDB.`", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"No bans found on CCDB.", inline=True)
             else:
                 activebans = 0
                 totalbans = 0
@@ -77,7 +77,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"`{activebans} active bans and {totalbans-activebans} elapsed bans found on CCDB.`", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"{activebans} active bans and {totalbans-activebans} elapsed bans found on CCDB.", inline=True)
         embs.append(emb)
         await interaction.response.send_message(embeds=embs, ephemeral=True)
     else:
