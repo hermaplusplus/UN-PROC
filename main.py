@@ -11,6 +11,8 @@ import time
 
 import json
 
+import requests
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -58,11 +60,24 @@ async def ckey(interaction: discord.Interaction, ckey: str):
         except:
             await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
             return
+        ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
         embs = []
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
+        if ccdb.status_code == 200:
+            ccdbdata = ccdb.json()
+            if len(ccdbdata) == 0:
+                emb.add_field(name="CCDB Bans", value=f"`No bans found on CCDB.`", inline=True)
+            else:
+                activebans = 0
+                totalbans = 0
+                for ban in ccdbdata:
+                    if ban['active']:
+                        activebans += 1
+                    totalbans += 1
+                emb.add_field(name="CCDB Bans", value=f"`{activebans} active bans and {totalbans-activebans} elapsed bans found on CCDB.`", inline=True)
         embs.append(emb)
         await interaction.response.send_message(embeds=embs, ephemeral=True)
     else:
