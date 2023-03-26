@@ -112,7 +112,8 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
                 emb.add_field(name="Admin", value=f"{ban['bannedBy']}", inline=True)
                 if "expires" in ban.keys():
                     emb.add_field(name="Expires", value=f"{ban['expires'].replace('T',' ').replace('Z','')}", inline=True)
-                emb.add_field(name="Original Ban ID", value=f"`{ban['banID']}`", inline=True)
+                if "banID" in ban.keys():
+                    emb.add_field(name="Original Ban ID", value=f"`{ban['banID']}`", inline=True)
                 embs.append(emb)
         if len(embs) == 0:
             await interaction.response.send_message(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
