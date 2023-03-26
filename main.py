@@ -107,13 +107,18 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             for ban in ccdbdata:
-                emb = discord.Embed(title=f"{ban['type']} Ban | {ban['sourceName']} | { 'Active' if ban['active'] else 'Expired'}", description=f"{ban['reason']}", colour=(discord.Colour.from_rgb(108, 186, 67) if ban['active'] else discord.Colour.from_rgb(213, 167, 70)))
+                banstatus = "Active" if ban['active'] else "Expired"
+                if "unbannedBy" in ban.keys():
+                    banstatus = "Unbanned"
+                emb = discord.Embed(title=f"{ban['type']} Ban | {ban['sourceName']} | {banstatus}", description=f"{ban['reason']}", colour=(discord.Colour.from_rgb(108, 186, 67) if banstatus == "Active" else (discord.Colour.from_rgb(213, 167, 70) if banstatus == "Expired" else discord.Colour.from_rgb(84, 151, 224))))
                 emb.add_field(name="Banned", value=f"{ban['bannedOn'].replace('T',' ').replace('Z','')}", inline=True)
                 emb.add_field(name="Admin", value=f"{ban['bannedBy']}", inline=True)
                 if "expires" in ban.keys():
                     emb.add_field(name="Expires", value=f"{ban['expires'].replace('T',' ').replace('Z','')}", inline=True)
                 if "banID" in ban.keys():
                     emb.add_field(name="Original Ban ID", value=f"`{ban['banID']}`", inline=True)
+                if "unbannedBy" in ban.keys():
+                    emb.add_field(name="Unbanned By", value=f"{ban['unbannedBy']}", inline=True)
                 embs.append(emb)
         if len(embs) == 0:
             await interaction.response.send_message(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
