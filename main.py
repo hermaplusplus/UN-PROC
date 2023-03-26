@@ -121,7 +121,7 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
             await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
         if len(embs) > 10:
             maxpages = math.ceil(len(embs)/10)
-            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {math.min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
+            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
     else:
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
 
