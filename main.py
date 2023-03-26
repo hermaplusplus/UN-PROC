@@ -13,6 +13,8 @@ import json
 
 import requests
 
+import math
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -77,9 +79,48 @@ async def ckey(interaction: discord.Interaction, ckey: str):
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"{activebans} active bans and {totalbans-activebans} elapsed bans found on CCDB.", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"{activebans} active, {totalbans-activebans} expired bans found on CCDB.", inline=True)
         embs.append(emb)
         await interaction.response.send_message(embeds=embs, ephemeral=True)
+    else:
+        await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
+
+@app_commands.checks.has_any_role(
+    342788067297329154,  # woof
+    1067984580272996422, # puppeteer
+    1070448231072419850, # meister
+    1067986874699874324, # esoteric engineer
+    1070761008311836693  # gatekeeper
+)
+@client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
+async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
+    if PROD or interaction.guild.id == 342787099407155202:
+        try:
+            playerData = getPlayerData(ckey)
+        except:
+            await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
+            return
+        ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
+        embs = []
+        #emb = discord.Embed(title=playerData['key'])
+        emb = discord.Embed()
+        if ccdb.status_code == 200:
+            ccdbdata = ccdb.json()
+            for ban in ccdbdata:
+                emb = discord.Embed(title=f"{ban['type']} Ban | {ban['sourceName']} | { 'Active' if ban['active'] else 'Expired'}", description=f"{ban['reason']}", colour=(discord.Colour.from_rgb(108, 186, 67) if ban['active'] else discord.Colour.from_rgb(213, 167, 70)))
+                emb.add_field(name="Banned", value=f"{ban['bannedOn'].replace('T',' ').replace('Z','')}", inline=True)
+                emb.add_field(name="Admin", value=f"{ban['bannedBy']}", inline=True)
+                if "expires" in ban.keys():
+                    emb.add_field(name="Expires", value=f"{ban['expires'].replace('T',' ').replace('Z','')}", inline=True)
+                emb.add_field(name="Original Ban ID", value=f"`{ban['banID']}`", inline=True)
+                embs.append(emb)
+        if len(embs) == 0:
+            await interaction.response.send_message(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
+        if len(embs) > 0 and len(embs) <= 10:
+            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
+        if len(embs) > 10:
+            maxpages = math.ceil(len(embs)/10)
+            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {math.min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
     else:
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
 
@@ -89,6 +130,7 @@ async def help(interaction:discord.Interaction):
         await interaction.response.send_message(f"**Commands:**\n"
                                                 f"`/help` shows this message.\n"
                                                 f"`/ckey` looks up a BYOND account's age by Ckey. Staff only.\n"
+                                                f"`/ccdb` looks up CCDB bans by Ckey. Staff only.\n"
                                                 f"\n"
                                                 f"**FAQ:**\n"
                                                 f"\n"
