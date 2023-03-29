@@ -56,7 +56,7 @@ async def on_ready():
 )
 @client.tree.command(description="Shows the age of a BYOND account by Ckey.")
 async def ckey(interaction: discord.Interaction, ckey: str):
-    await interaction.response.defer()
+    await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
             playerData = getPlayerData(ckey)
@@ -95,7 +95,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
 )
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
-    await interaction.response.defer()
+    await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
             playerData = getPlayerData(ckey)
