@@ -56,11 +56,12 @@ async def on_ready():
 )
 @client.tree.command(description="Shows the age of a BYOND account by Ckey.")
 async def ckey(interaction: discord.Interaction, ckey: str):
+    await interaction.response.defer()
     if PROD or interaction.guild.id == 342787099407155202:
         try:
             playerData = getPlayerData(ckey)
         except:
-            await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
+            await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
             return
         ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
         embs = []
@@ -81,9 +82,9 @@ async def ckey(interaction: discord.Interaction, ckey: str):
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"{activebans} active, {totalbans-activebans} expired bans found on CCDB.", inline=True)
         embs.append(emb)
-        await interaction.response.send_message(embeds=embs, ephemeral=True)
+        await interaction.followup.send(embeds=embs, ephemeral=True)
     else:
-        await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
+        await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
@@ -94,11 +95,12 @@ async def ckey(interaction: discord.Interaction, ckey: str):
 )
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
+    await interaction.response.defer()
     if PROD or interaction.guild.id == 342787099407155202:
         try:
             playerData = getPlayerData(ckey)
         except:
-            await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
+            await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
             return
         ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
         embs = []
@@ -121,14 +123,14 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
                     emb.add_field(name="Unbanned By", value=f"{ban['unbannedBy']}", inline=True)
                 embs.append(emb)
         if len(embs) == 0:
-            await interaction.response.send_message(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
+            await interaction.followup.send(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
         if len(embs) > 0 and len(embs) <= 10:
-            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True)
         if len(embs) > 10:
             maxpages = math.ceil(len(embs)/10)
-            await interaction.response.send_message(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
     else:
-        await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
+        await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
 @client.tree.command(description="Displays a list of commands and how to use the bot.")
 async def help(interaction:discord.Interaction):
