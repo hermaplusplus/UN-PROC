@@ -15,8 +15,6 @@ import requests
 
 import math
 
-import urllib.parse
-
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -61,7 +59,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
-            playerData = getPlayerData(urllib.parse.quote(ckey))
+            playerData = getPlayerData(ckey.replace(" ", ""))
         except:
             await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
             return
@@ -100,7 +98,7 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
-            playerData = getPlayerData(urllib.parse.quote(ckey))
+            playerData = getPlayerData(ckey.replace(" ", ""))
         except:
             await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
             return
