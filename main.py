@@ -58,7 +58,6 @@ async def on_ready():
 async def ckey(interaction: discord.Interaction, ckey: str):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
-        ckey = ckey.replace(" ", "")
         try:
             playerData = getPlayerData(ckey)
         except:
@@ -98,7 +97,6 @@ async def ckey(interaction: discord.Interaction, ckey: str):
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
-        ckey = ckey.replace(" ", "")
         try:
             playerData = getPlayerData(ckey)
         except:
