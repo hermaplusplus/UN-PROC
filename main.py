@@ -49,10 +49,15 @@ async def on_ready():
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
+    1067988504602222634, # sheriff
+    1100835027299876996, # head spriter
+    1067986874699874324, # eso engi
+    1100835356766638250, # spriter
+    1086064562396205199, # patriarch
+    1100835968694632488, # scribe
+    1070761008311836693, # gatekeeper
     1067984580272996422, # puppeteer
-    1070448231072419850, # meister
-    1067986874699874324, # esoteric engineer
-    1070761008311836693  # gatekeeper
+    1070448231072419850  #meister
 )
 @client.tree.command(description="Shows the age of a BYOND account by Ckey.")
 async def ckey(interaction: discord.Interaction, ckey: str):
@@ -88,10 +93,15 @@ async def ckey(interaction: discord.Interaction, ckey: str):
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
+    1067988504602222634, # sheriff
+    1100835027299876996, # head spriter
+    1067986874699874324, # eso engi
+    1100835356766638250, # spriter
+    1086064562396205199, # patriarch
+    1100835968694632488, # scribe
+    1070761008311836693, # gatekeeper
     1067984580272996422, # puppeteer
-    1070448231072419850, # meister
-    1067986874699874324, # esoteric engineer
-    1070761008311836693  # gatekeeper
+    1070448231072419850  #meister
 )
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
