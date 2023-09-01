@@ -197,7 +197,8 @@ class Reg(ui.Modal, title="Registration"):
         embs = []
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
-        emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=False)
+        emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
+        emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Origin", value=f"```{self.origin.value}```", inline=False)
         emb.add_field(name="Experience", value=f"```{self.experience.value}```", inline=False)
         emb.add_field(name="Interest", value=f"```{self.interest.value}```", inline=False)
