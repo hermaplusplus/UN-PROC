@@ -216,7 +216,7 @@ class Reg(ui.Modal, title="Registration"):
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/ban/search/{self.ckey.value})", inline=False)
+                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value})", inline=False)
         await client.get_channel(TEST_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
