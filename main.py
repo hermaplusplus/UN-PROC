@@ -168,7 +168,7 @@ class Reg(ui.Modal, title="Registration"):
                             style=discord.TextStyle.short,
                             placeholder="",
                             max_length=100)
-    origin      = ui.TextInput(label="Where did you hear of us from?",
+    origin      = ui.TextInput(label="Where or who (specifically) did you hear of us from?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
