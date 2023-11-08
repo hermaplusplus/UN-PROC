@@ -15,15 +15,22 @@ import requests
 
 import math
 
+import os
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
 PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1130593458982244484)]
 #PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
-VERIFICATION_CHANNEL = discord.Object(id=1142517836879773816)
+VERIFICATION_CHANNEL_ID = 1142517836879773816
+VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
 VERIFICATION_QUEUE = discord.Object(id=1142518244217991168)
-TEST_QUEUE_ID = 1142518244217991168
+HIGH_STAFF_REFER = "Council Members"
+HIGH_STAFF_ROLE_ID = 1130594155597402172
+OTHER_APPROVER_REFER = "Enforcers"
+OTHER_APPROVER_ROLE_ID = 1130595229486026832
+APPROVED_ROLE_ID = 1142516172265369650
 
 PROD = True
 
@@ -52,7 +59,7 @@ async def on_ready():
     await client.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.playing,
-            name="Human Simulator"
+            name="Psydon's Gate 3"
         )
     )
 
@@ -217,7 +224,7 @@ class Reg(ui.Modal, title="Registration"):
                         activebans += 1
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value})", inline=False)
-        await client.get_channel(TEST_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
+        await client.get_channel(VERIFICATION_QUEUE).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
     def __init__(self, uid, ckey, origin, experience, interest, agreement):
@@ -232,24 +239,25 @@ class Verification(ui.View):
     @ui.button(label="Accept", style=discord.ButtonStyle.green, custom_id=f"accept")
     async def accept_callback(self, interaction: discord.Interaction, button: ui.Button):
         await interaction.response.defer()
-        if not ( (1130594155597402172 in [r.id for r in interaction.user.roles]) or (1130595229486026832 in [r.id for r in interaction.user.roles]) ):
-            await interaction.followup.send("Only Council members and Enforcers can approve registrations.", ephemeral=True)
+        if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
+            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can approve registrations.", ephemeral=True)
             return
         u = interaction.guild.get_member(self.uid)
-        await u.add_roles(discord.Object(1142516172265369650))
+        await u.add_roles(discord.Object(APPROVED_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[0].disabled = True
         buttons[0].label = "Accepted"
         self.remove_item(buttons[1])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
+        os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
         self.stop()
 
     @ui.button(label="Reject", style=discord.ButtonStyle.red, custom_id=f"reject")
     async def reject_callback(self, interaction: discord.Interaction, button: ui.Button):
         await interaction.response.defer()
-        if not ( (1130594155597402172 in [r.id for r in interaction.user.roles]) or (1130595229486026832 in [r.id for r in interaction.user.roles]) ):
-            await interaction.followup.send("Only Council members and Enforcers can reject registrations.", ephemeral=True)
+        if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
+            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can reject registrations.", ephemeral=True)
             return
         buttons = [b for b in self.children]
         buttons[1].disabled = True
@@ -261,11 +269,11 @@ class Verification(ui.View):
 
 @client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
 async def register(interaction: discord.Interaction):
-    if 1142516172265369650 in [r.id for r in interaction.user.roles]:
+    if APPROVED_ROLE_ID in [r.id for r in interaction.user.roles]:
         await interaction.response.send_message("Approved members cannot use this command.", ephemeral=True)
         return
-    if interaction.channel.id not in [381573551200796672, 1142517836879773816]:
-        await interaction.response.send_message("This command can only be used in <#1142517836879773816>.", ephemeral=True)
+    if interaction.channel.id not in [381573551200796672, VERIFICATION_CHANNEL_ID]:
+        await interaction.response.send_message(f"This command can only be used in <#{VERIFICATION_CHANNEL_ID}>.", ephemeral=True)
         return
     await interaction.response.send_modal(Reg())
 
