@@ -176,15 +176,15 @@ class Reg(ui.Modal, title="Registration"):
                             style=discord.TextStyle.short,
                             placeholder="",
                             max_length=100)
-    origin      = ui.TextInput(label="Where/who exactly did you hear of us from?",
+    origin      = ui.TextInput(label="How did you find EnigmaTown?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    experience  = ui.TextInput(label="List your experience with SS13 and any bans.",
+    experience  = ui.TextInput(label="If invited by a friend, who are they?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    interest    = ui.TextInput(label="Why are you interested in joining us?",
+    interest    = ui.TextInput(label="Why do you want to join EnigmaTown?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
@@ -207,10 +207,10 @@ class Reg(ui.Modal, title="Registration"):
         emb = discord.Embed()
         emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="Origin", value=f"```{self.origin.value}```", inline=False)
-        emb.add_field(name="Experience", value=f"```{self.experience.value}```", inline=False)
-        emb.add_field(name="Interest", value=f"```{self.interest.value}```", inline=False)
-        emb.add_field(name="Agreement", value=f"```{self.agreement.value}```", inline=False)
+        emb.add_field(name="How did you find EnigmaTown?", value=f"```{self.origin.value}```", inline=False)
+        emb.add_field(name="If invited by a friend, who are they?", value=f"```{self.experience.value}```", inline=False)
+        emb.add_field(name="Why do you want to join EnigmaTown?", value=f"```{self.interest.value}```", inline=False)
+        emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=False)
         if ccdb.status_code == 200:
