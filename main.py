@@ -25,6 +25,7 @@ PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1167
 #PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
 VERIFICATION_CHANNEL_ID = 1172294781850898432
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
+VERIFICATION_QUEUE_ID = 1171888348948877443
 VERIFICATION_QUEUE = discord.Object(id=1171888348948877443)
 HIGH_STAFF_REFER = "Dungeon Masters"
 HIGH_STAFF_ROLE_ID = 1169980778919231669
@@ -224,7 +225,7 @@ class Reg(ui.Modal, title="Registration"):
                         activebans += 1
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value})", inline=False)
-        await client.get_channel(VERIFICATION_QUEUE).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
+        await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
     def __init__(self, uid, ckey, origin, experience, interest, agreement):
