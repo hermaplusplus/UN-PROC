@@ -32,6 +32,7 @@ HIGH_STAFF_ROLE_ID = 1169980778919231669
 OTHER_APPROVER_REFER = "Chatmods"
 OTHER_APPROVER_ROLE_ID = 1167969157053161522
 APPROVED_ROLE_ID = 1172295904229851229
+REJECT_ROLE_ID = 1168480230638358538
 
 PROD = True
 
@@ -260,6 +261,7 @@ class Verification(ui.View):
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can reject registrations.", ephemeral=True)
             return
+        await u.add_roles(discord.Object(REJECT_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[1].disabled = True
         buttons[1].label = "Rejected"
