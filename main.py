@@ -261,6 +261,7 @@ class Verification(ui.View):
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can reject registrations.", ephemeral=True)
             return
+        u = interaction.guild.get_member(self.uid)
         await u.add_roles(discord.Object(REJECT_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[1].disabled = True
