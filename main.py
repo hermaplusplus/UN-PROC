@@ -277,23 +277,26 @@ class Rep(ui.Modal, title="Report"):
     ckey = ui.TextInput(label="What is the player's Ckey (if known)?",
                         style=discord.TextStyle.short,
                         placeholder="",
-                        max_length=100)
+                        max_length=100,
+                        required=False)
     char = ui.TextInput(label="What is the character's name (if known)?",
                         style=discord.TextStyle.short,
                         placeholder="",
-                        max_length=100)
+                        max_length=100,
+                        required=False)
     disc = ui.TextInput(label="What is the player's Discord (if known)?",
                         style=discord.TextStyle.short,
                         placeholder="",
-                        max_length=100)
-    ridt = ui.TextInput(label="What is the round ID and/or time?",
+                        max_length=100,
+                        required=False)
+    ridt = ui.TextInput(label="What is the round ID and/or time? (if known)",
                         style=discord.TextStyle.short,
                         placeholder="",
-                        max_length=200)
+                        max_length=200,
+                        required=False)
     rson = ui.TextInput(label="What is the reason for the report?",
                         style=discord.TextStyle.long,
                         placeholder="Please be as detailed as possible. Use filehosts for logs, screenshots, videos, etc.",
-                        min_length=0,
                         max_length=3000)
 
     async def on_submit(self, interaction:discord.Interaction):
