@@ -172,7 +172,7 @@ async def on_app_command_error(interaction, error):
     if isinstance(error, app_commands.MissingAnyRole):
         await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
     else:
-        await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
+        #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
         raise error
 
 class Reg(ui.Modal, title="Registration"):
@@ -318,6 +318,7 @@ class Rep(ui.Modal, title="Report"):
         emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
         await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
+        await interaction.response.send_message("Your report has been successfully submitted. Thank you.", ephemeral=True)
 
 @client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
 async def register(interaction: discord.Interaction):
