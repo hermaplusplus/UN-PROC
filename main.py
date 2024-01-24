@@ -333,7 +333,7 @@ async def report(interaction: discord.Interaction):
     if APPROVED_ROLE_ID not in [r.id for r in interaction.user.roles]:
         await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
         return
-    await interaction.response.send_modal(Reg())
+    await interaction.response.send_modal(Rep())
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
