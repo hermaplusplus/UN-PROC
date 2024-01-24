@@ -304,7 +304,7 @@ class Rep(ui.Modal, title="Report"):
         with open('accountlinks.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
-                if row[0] == interaction.user:
+                if row[0] == str(interaction.user.id):
                     reporterckey = f"`{row[1]}`"
         embs = []
         emb = discord.Embed()
