@@ -318,7 +318,7 @@ class Rep(ui.Modal, title="Report"):
         emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
         await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
-        await interaction.response.send_message("Your report has been successfully submitted. Thank you.", ephemeral=True)
+        await interaction.response.send_message("Your report has been successfully submitted.", ephemeral=True)
 
 @client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
 async def register(interaction: discord.Interaction):
