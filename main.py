@@ -154,6 +154,7 @@ async def help(interaction:discord.Interaction):
         await interaction.response.send_message(f"**Commands:**\n"
                                                 f"`/help` shows this message.\n"
                                                 f"`/register` begins the registration process.\n"
+                                                f"`/report` submits a player report.\n"
                                                 f"\n"
                                                 f"**FAQ:**\n"
                                                 f"\n"
@@ -161,7 +162,7 @@ async def help(interaction:discord.Interaction):
                                                 f"A: <@188796089380503555>.\n"
                                                 f"\n"
                                                 f"Q: *How can I help pay for the upkeep of the bot?*\n"
-                                                f"A: https://github.com/sponsors/hermaplusplus",
+                                                f"A: https://sponsor.herma.moe/",
                                                 ephemeral=True)
     else:
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
@@ -171,7 +172,7 @@ async def on_app_command_error(interaction, error):
     if isinstance(error, app_commands.MissingAnyRole):
         await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
     else:
-        #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
+        await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
         raise error
 
 class Reg(ui.Modal, title="Registration"):
