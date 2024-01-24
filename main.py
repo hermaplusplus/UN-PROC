@@ -301,7 +301,7 @@ class Rep(ui.Modal, title="Report"):
                         max_length=3000)
 
     async def on_submit(self, interaction:discord.Interaction):
-        reporterckey = ""
+        reporterckey = "Unknown Ckey!"
         with open('accountlinks.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
@@ -311,10 +311,10 @@ class Rep(ui.Modal, title="Report"):
         emb = discord.Embed()
         emb.add_field(name="Reporter's Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Reporter's Ckey", value=f"{reporterckey}", inline=True)
-        emb.add_field(name="What is the player's Ckey (if known)?", value=f"```{self.ckey.value}```", inline=False)
-        emb.add_field(name="What is the character's name (if known)?", value=f"```{self.char.value}```", inline=False)
-        emb.add_field(name="What is the player's Discord (if known)?", value=f"```{self.disc.value}```", inline=False)
-        emb.add_field(name="What is the round ID and/or time?", value=f"```{self.ridt.value}```", inline=False)
+        emb.add_field(name="What is the player's Ckey (if known)?", value=(f"```{self.ckey.value}```" if self.ckey.value != "" else "No response."), inline=False)
+        emb.add_field(name="What is the character's name (if known)?", value=(f"```{self.char.value}```" if self.ckey.value != "" else "No response."), inline=False)
+        emb.add_field(name="What is the player's Discord (if known)?", value=(f"```{self.disc.value}```" if self.ckey.value != "" else "No response."), inline=False)
+        emb.add_field(name="What is the round ID and/or time?", value=(f"```{self.ridt.value}```" if self.ckey.value != "" else "No response."), inline=False)
         emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
         await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
