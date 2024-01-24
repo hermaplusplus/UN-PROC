@@ -10,6 +10,7 @@ from datetime import datetime
 import time
 
 import json
+import csv
 
 import requests
 
@@ -33,6 +34,7 @@ OTHER_APPROVER_REFER = "Chatmods"
 OTHER_APPROVER_ROLE_ID = 1167969157053161522
 APPROVED_ROLE_ID = 1172295904229851229
 REJECT_ROLE_ID = 1168480230638358538
+REPORTS_CHANNEL_ID = 1199541956376797244
 
 PROD = True
 
@@ -271,6 +273,48 @@ class Verification(ui.View):
         await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
         self.stop()
 
+class Rep(ui.Modal, title="Report"):
+    ckey = ui.TextInput(label="What is the player's Ckey (if known)?",
+                        style=discord.TextStyle.short,
+                        placeholder="",
+                        max_length=100)
+    char = ui.TextInput(label="What is the character's name (if known)?",
+                        style=discord.TextStyle.short,
+                        placeholder="",
+                        max_length=100)
+    disc = ui.TextInput(label="What is the player's Discord (if known)?",
+                        style=discord.TextStyle.short,
+                        placeholder="",
+                        max_length=100)
+    ridt = ui.TextInput(label="What is the round ID and/or time?",
+                        style=discord.TextStyle.short,
+                        placeholder="",
+                        max_length=200)
+    rson = ui.TextInput(label="What is the reason for the report?",
+                        style=discord.TextStyle.long,
+                        placeholder="Please be as detailed as possible. Use filehosts for logs, screenshots, videos, etc.",
+                        min_length=0,
+                        max_length=3000)
+
+    async def on_submit(self, interaction:discord.Interaction):
+        reporterckey = ""
+        with open('accountlinks.csv', 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row[0] == interaction.user:
+                    reporterckey = f"`{row[1]}`"
+        embs = []
+        emb = discord.Embed()
+        emb.add_field(name="Reporter's Discord", value=f"{interaction.user.mention}", inline=True)
+        emb.add_field(name="Reporter's Ckey", value=f"{reporterckey}", inline=True)
+        emb.add_field(name="What is the player's Ckey (if known)?", value=f"```{self.ckey.value}```", inline=False)
+        emb.add_field(name="What is the character's name (if known)?", value=f"```{self.char.value}```", inline=False)
+        emb.add_field(name="What is the player's Discord (if known)?", value=f"```{self.disc.value}```", inline=False)
+        emb.add_field(name="What is the round ID and/or time?", value=f"```{self.ridt.value}```", inline=False)
+        emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
+        #emb.add_field(name='\u200b', value='``` ```')
+        await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
+
 @client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
 async def register(interaction: discord.Interaction):
     if APPROVED_ROLE_ID in [r.id for r in interaction.user.roles]:
@@ -278,6 +322,13 @@ async def register(interaction: discord.Interaction):
         return
     if interaction.channel.id not in [381573551200796672, VERIFICATION_CHANNEL_ID]:
         await interaction.response.send_message(f"This command can only be used in <#{VERIFICATION_CHANNEL_ID}>.", ephemeral=True)
+        return
+    await interaction.response.send_modal(Reg())
+
+@client.tree.command(description="Submit a player report.")
+async def report(interaction: discord.Interaction):
+    if APPROVED_ROLE_ID not in [r.id for r in interaction.user.roles]:
+        await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
         return
     await interaction.response.send_modal(Reg())
 
