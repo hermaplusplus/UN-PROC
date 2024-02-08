@@ -22,18 +22,18 @@ SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1167235329951027291)]
+PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1205188058434244689)]
 #PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
-VERIFICATION_CHANNEL_ID = 1172294781850898432
+VERIFICATION_CHANNEL_ID = 1205198607121125376
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
-VERIFICATION_QUEUE_ID = 1171888348948877443
-VERIFICATION_QUEUE = discord.Object(id=1171888348948877443)
-HIGH_STAFF_REFER = "Dungeon Masters"
-HIGH_STAFF_ROLE_ID = 1169980778919231669
-OTHER_APPROVER_REFER = "Chatmods"
-OTHER_APPROVER_ROLE_ID = 1167969157053161522
-APPROVED_ROLE_ID = 1172295904229851229
-REJECT_ROLE_ID = 1168480230638358538
+VERIFICATION_QUEUE_ID = 1205201408513548338
+VERIFICATION_QUEUE = discord.Object(id=VERIFICATION_QUEUE_ID)
+HIGH_STAFF_REFER = "ARCH-MAGOS"
+HIGH_STAFF_ROLE_ID = 1205188707871891536
+OTHER_APPROVER_REFER = "AH-1 APPROVER"
+OTHER_APPROVER_ROLE_ID = 1205209374516322365
+APPROVED_ROLE_ID = 1205197793413697607
+REJECT_ROLE_ID = 1205197840658464888
 REPORTS_CHANNEL_ID = 1199541956376797244
 
 PROD = True
@@ -63,7 +63,7 @@ async def on_ready():
     await client.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.playing,
-            name="Psydon's Gate 3"
+            name="DUNGEON OF SIN"
         )
     )
 
@@ -148,53 +148,52 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 """
 
-@client.tree.command(description="Displays a list of commands and how to use the bot.")
+@client.tree.command(description="DISPLAY COMMANDS")
 async def help(interaction:discord.Interaction):
     if PROD or interaction.guild.id == 342787099407155202:
-        await interaction.response.send_message(f"**Commands:**\n"
-                                                f"`/help` shows this message.\n"
-                                                f"`/register` begins the registration process.\n"
-                                                f"`/report` submits a player report.\n"
+        await interaction.response.send_message(f"**COMMANDS:**\n"
+                                                f"`/help` DISPLAY HELP MESSAGE.\n"
+                                                f"`/register` BEGIN CONSCRIPTION.\n"
                                                 f"\n"
                                                 f"**FAQ:**\n"
                                                 f"\n"
-                                                f"Q: *Who should I direct technical questions to?*\n"
+                                                f"Q: *TECHNICAL CONTACT ?*\n"
                                                 f"A: <@188796089380503555>.\n"
                                                 f"\n"
-                                                f"Q: *How can I help pay for the upkeep of the bot?*\n"
+                                                f"Q: *FINANCIAL CONTRIBUTIONS ?*\n"
                                                 f"A: https://sponsor.herma.moe/",
                                                 ephemeral=True)
     else:
-        await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
+        await interaction.response.send_message("COMMAND UNAVAILABLE.", ephemeral=True)
 
 @client.tree.error
 async def on_app_command_error(interaction, error):
     if isinstance(error, app_commands.MissingAnyRole):
-        await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
+        await interaction.response.send_message("ACCESS DENIED. REVIEW USER PERMISSIONS.", ephemeral=True)
     else:
         #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
         raise error
 
-class Reg(ui.Modal, title="Registration"):
-    ckey = ui.TextInput(label="What is your Ckey (BYOND username)?)",
+class Reg(ui.Modal, title="REGISTER"):
+    ckey = ui.TextInput(label="ENTER CKEY :",
                             style=discord.TextStyle.short,
                             placeholder="",
                             max_length=100)
-    origin      = ui.TextInput(label="How did you find EnigmaTown?",
+    origin      = ui.TextInput(label="SPECIFY HOW YOU FOUND US :",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    experience  = ui.TextInput(label="If invited by a friend, who are they?",
+    experience  = ui.TextInput(label="LIST SS13 EXPERIENCE AND BANS :",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    interest    = ui.TextInput(label="Why do you want to join EnigmaTown?",
+    interest    = ui.TextInput(label="EXPLAIN INTEREST IN JOINING :",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    agreement    = ui.TextInput(label="Do you agree to abide by the rules?",
+    agreement    = ui.TextInput(label="AGREE TO ABIDE BY RULES ?",
                             style=discord.TextStyle.short,
-                            placeholder="Yes",
+                            placeholder="YES",
                             min_length=3,
                             max_length=3)
 
@@ -202,25 +201,25 @@ class Reg(ui.Modal, title="Registration"):
         try:
             playerData = getPlayerData(self.ckey.value)
         except:
-            await interaction.response.send_message("The Ckey you specified couldn't be found.", ephemeral=True)
+            await interaction.response.send_message("CKEY NOT FOUND!", ephemeral=True)
             return
-        await interaction.response.send_message("Your registration has been submitted. Please await staff approval.", ephemeral=True)
+        await interaction.response.send_message("CONSCRIPTION PROCESSING... AWAIT VERDICT...", ephemeral=True)
         ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{self.ckey.value}")
         embs = []
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
-        emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
-        emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="How did you find EnigmaTown?", value=f"```{self.origin.value}```", inline=False)
-        emb.add_field(name="If invited by a friend, who are they?", value=f"```{self.experience.value}```", inline=False)
-        emb.add_field(name="Why do you want to join EnigmaTown?", value=f"```{self.interest.value}```", inline=False)
-        emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
+        emb.add_field(name="DISCORD", value=f"{interaction.user.mention}", inline=True)
+        emb.add_field(name="CKEY", value=f"`{playerData['ckey']}`", inline=True)
+        emb.add_field(name="ORIGIN", value=f"```{self.origin.value}```", inline=False)
+        emb.add_field(name="EXPERIENCE", value=f"```{self.experience.value}```", inline=False)
+        emb.add_field(name="INTEREST", value=f"```{self.interest.value}```", inline=False)
+        emb.add_field(name="AGREEMENT", value=f"```{self.agreement.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
-        emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=False)
+        emb.add_field(name="ACCOUNT CREATION DATE", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=False)
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
-                emb.add_field(name="CCDB Bans", value=f"No bans found on CCDB.", inline=False)
+                emb.add_field(name="CCDB BANS", value=f"NO BANS FOUND.", inline=False)
             else:
                 activebans = 0
                 totalbans = 0
@@ -228,7 +227,7 @@ class Reg(ui.Modal, title="Registration"):
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value})", inline=False)
+                emb.add_field(name="CCDB BANS", value=f"[{activebans} ACTIVE, {totalbans-activebans} EXPIRED BANS.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value.replace(' ', '%20')})", inline=False)
         await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.origin.value, self.experience.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
@@ -241,39 +240,40 @@ class Verification(ui.View):
         self.interest = interest
         self.agreement = agreement
     
-    @ui.button(label="Accept", style=discord.ButtonStyle.green, custom_id=f"accept")
+    @ui.button(label="ACCEPT", style=discord.ButtonStyle.green, custom_id=f"accept")
     async def accept_callback(self, interaction: discord.Interaction, button: ui.Button):
         await interaction.response.defer()
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
-            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can approve registrations.", ephemeral=True)
+            await interaction.followup.send(f"ACCESS DENIED : USER NOT {HIGH_STAFF_REFER} OR {OTHER_APPROVER_REFER}", ephemeral=True)
             return
         u = interaction.guild.get_member(self.uid)
         await u.add_roles(discord.Object(APPROVED_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[0].disabled = True
-        buttons[0].label = "Accepted"
+        buttons[0].label = "ACCEPTED"
         self.remove_item(buttons[1])
         await interaction.followup.edit_message(interaction.message.id, view=self)
-        await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
+        await interaction.followup.send(f"✅ <@{self.uid}> CONSCRIPTED BY {interaction.user.mention}.")
         os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
         self.stop()
 
-    @ui.button(label="Reject", style=discord.ButtonStyle.red, custom_id=f"reject")
+    @ui.button(label="REJECT", style=discord.ButtonStyle.red, custom_id=f"reject")
     async def reject_callback(self, interaction: discord.Interaction, button: ui.Button):
         await interaction.response.defer()
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
-            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can reject registrations.", ephemeral=True)
+            await interaction.followup.send(f"ACCESS DENIED : USER NOT {HIGH_STAFF_REFER} OR {OTHER_APPROVER_REFER}", ephemeral=True)
             return
         u = interaction.guild.get_member(self.uid)
         await u.add_roles(discord.Object(REJECT_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[1].disabled = True
-        buttons[1].label = "Rejected"
+        buttons[1].label = "REJECTED"
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
-        await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
+        await interaction.followup.send(f"⛔ <@{self.uid}> REJECTED BY {interaction.user.mention}.")
         self.stop()
 
+"""
 class Rep(ui.Modal, title="Report"):
     ckey = ui.TextInput(label="What is the player's Ckey (if known)?",
                         style=discord.TextStyle.short,
@@ -319,23 +319,26 @@ class Rep(ui.Modal, title="Report"):
         #emb.add_field(name='\u200b', value='``` ```')
         await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
         await interaction.response.send_message("Your report has been successfully submitted.", ephemeral=True)
-
-@client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
+"""
+        
+@client.tree.command(description="BEGIN CONSCRIPTION : AWAIT VERDICT")
 async def register(interaction: discord.Interaction):
     if APPROVED_ROLE_ID in [r.id for r in interaction.user.roles]:
-        await interaction.response.send_message("Approved members cannot use this command.", ephemeral=True)
+        await interaction.response.send_message("ACCESS DENIED : ALREADY CONSCRIPT", ephemeral=True)
         return
     if interaction.channel.id not in [381573551200796672, VERIFICATION_CHANNEL_ID]:
-        await interaction.response.send_message(f"This command can only be used in <#{VERIFICATION_CHANNEL_ID}>.", ephemeral=True)
+        await interaction.response.send_message(f"ACCESS DENIED : CHANNEL NOT <#{VERIFICATION_CHANNEL_ID}>", ephemeral=True)
         return
     await interaction.response.send_modal(Reg())
 
+"""
 @client.tree.command(description="Submit a player report.")
 async def report(interaction: discord.Interaction):
     if APPROVED_ROLE_ID not in [r.id for r in interaction.user.roles]:
         await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
         return
     await interaction.response.send_modal(Rep())
+"""
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
