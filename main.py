@@ -211,7 +211,7 @@ class Reg(ui.Modal, title="Registration"):
         emb = discord.Embed()
         emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="What is your date of birth? (DD-MM-YYYY)", value=f"```{self.dob.value}```", inline=False)
+        emb.add_field(name="What is your date of birth? (DD-MM-YYYY)", value=f"```{self.dob.value}```\nDate 18 years ago: <t:{int((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>", inline=False)
         emb.add_field(name="How did you find RT? If invited, by who?", value=f"```{self.origin.value}```", inline=False)
         emb.add_field(name="Why do you want to join RogueTown?", value=f"```{self.interest.value}```", inline=False)
         emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
@@ -229,7 +229,7 @@ class Reg(ui.Modal, title="Registration"):
                         activebans += 1
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value.replace(' ', '%20')})", inline=False)
-        emb.set_footer(text=f"Date 18 years ago: <t:{round((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>")
+        #emb.set_footer(text=f"Date 18 years ago: <t:{int((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>")
         await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.dob.value, self.origin.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
