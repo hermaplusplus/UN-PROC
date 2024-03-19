@@ -229,7 +229,7 @@ class Reg(ui.Modal, title="Registration"):
                         activebans += 1
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value.replace(' ', '%20')})", inline=False)
-        emb.set_footer(text=f"Date 18 years ago: <t:{(datetime.now() - timedelta(days=18*365.24)).timestamp()}:d>")
+        emb.set_footer(text=f"Date 18 years ago: <t:{round((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>")
         await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.dob.value, self.origin.value, self.interest.value, self.agreement.value))
 
 class Verification(ui.View):
