@@ -211,7 +211,7 @@ class Reg(ui.Modal, title="Registration"):
         emb = discord.Embed()
         emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="What is your date of birth? (DD-MM-YYYY)", value=f"```{self.dob.value}```\nDate 18 years ago: <t:{int((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>", inline=False)
+        emb.add_field(name="Date 18 years ago: <t:{int((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>\nWhat is your date of birth? (DD-MM-YYYY)", value=f"```{self.dob.value}```", inline=False)
         emb.add_field(name="How did you find RT? If invited, by who?", value=f"```{self.origin.value}```", inline=False)
         emb.add_field(name="Why do you want to join RogueTown?", value=f"```{self.interest.value}```", inline=False)
         emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
