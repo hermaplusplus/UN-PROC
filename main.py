@@ -22,19 +22,19 @@ SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1167235329951027291)]
+PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1169125844246069298)]#
 #PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
-VERIFICATION_CHANNEL_ID = 1172294781850898432
+VERIFICATION_CHANNEL_ID = 
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
-VERIFICATION_QUEUE_ID = 1171888348948877443
-VERIFICATION_QUEUE = discord.Object(id=1171888348948877443)
-HIGH_STAFF_REFER = "Dungeon Masters"
-HIGH_STAFF_ROLE_ID = 1169980778919231669
-OTHER_APPROVER_REFER = "Chatmods"
-OTHER_APPROVER_ROLE_ID = 1167969157053161522
-APPROVED_ROLE_ID = 1172295904229851229
-REJECT_ROLE_ID = 1168480230638358538
-REPORTS_CHANNEL_ID = 1199541956376797244
+VERIFICATION_QUEUE_ID = 1224860154864865280
+VERIFICATION_QUEUE = discord.Object(id=VERIFICATION_QUEUE_ID)
+HIGH_STAFF_REFER = "Wizards"
+HIGH_STAFF_ROLE_ID = 1224447318342897664
+OTHER_APPROVER_REFER = "Server Moderators"
+OTHER_APPROVER_ROLE_ID = 1224452065502429206
+APPROVED_ROLE_ID = 1224852178435571774
+REJECT_ROLE_ID = 1224854395464974408
+REPORTS_CHANNEL_ID = 1224860186548895916
 
 PROD = True
 
@@ -50,11 +50,12 @@ class Client(discord.Client):
             await self.tree.sync(guild=i)
         print("Command tree sync completed")
 
-intents = discord.Intents.default()
-intents.members = True
-intents.guilds = True
-intents.messages = True
+#intents = discord.Intents.default()
+#intents.members = True
+#intents.guilds = True
+#intents.messages = True
 #intents.all = True
+intents = discord.Intents.all()
 client = Client(intents=intents)
 
 @client.event
@@ -298,7 +299,7 @@ class Rep(ui.Modal, title="Report"):
                         required=False)
     rson = ui.TextInput(label="What is the reason for the report?",
                         style=discord.TextStyle.long,
-                        placeholder="Please be as detailed as possible. Use filehosts for logs, screenshots, videos, etc.",
+                        placeholder="Please be as detailed as possible. Use filehosts for logs, screenshots, videos, etc. DO NOT USE DISCORD FILE LINKS!",
                         max_length=3000)
 
     async def on_submit(self, interaction:discord.Interaction):
@@ -337,6 +338,16 @@ async def report(interaction: discord.Interaction):
         await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
         return
     await interaction.response.send_modal(Rep())
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.channel.id != VERIFICATION_CHANNEL_ID:
+        return
+    if HIGH_STAFF_ROLE_ID not in [r.id for r in message.author.roles] and OTHER_APPROVER_ROLE_ID not in [r.id for r in message.author.roles]:
+        return
+    await message.delete()
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
