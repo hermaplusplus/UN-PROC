@@ -22,8 +22,8 @@ SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-#PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1169125844246069298)]#
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
+PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1169125844246069298)]
+#PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
 VERIFICATION_CHANNEL_ID = 1224863354590593087
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
 VERIFICATION_QUEUE_ID = 1224860154864865280
@@ -64,7 +64,7 @@ async def on_ready():
     await client.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.playing,
-            name="Psydon's Gate 3"
+            name="Dwarf's Dogma 2"
         )
     )
 
@@ -343,11 +343,12 @@ async def report(interaction: discord.Interaction):
 async def on_message(message):
     if message.author == client.user:
         return
-    #if message.channel.id != VERIFICATION_CHANNEL_ID:
-    #    return
+    if message.channel.id != VERIFICATION_CHANNEL_ID:
+        return
     if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
         return
-    await message.delete()
+    #await message.delete()
+    await message.add_reaction("🗑️")
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
