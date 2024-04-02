@@ -345,10 +345,10 @@ async def on_message(message):
         return
     if message.channel.id != VERIFICATION_CHANNEL_ID:
         return
-    #if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
-    #    return
-    #await message.delete()
-    await message.add_reaction("🗑️")
+    if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
+        return
+    await message.delete()
+    #await message.add_reaction("🗑️")
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
