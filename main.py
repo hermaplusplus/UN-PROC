@@ -24,7 +24,7 @@ from byond2json import player2dict as getPlayerData
 
 PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1169125844246069298)]#
 #PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
-VERIFICATION_CHANNEL_ID = 
+VERIFICATION_CHANNEL_ID = 1224863354590593087
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
 VERIFICATION_QUEUE_ID = 1224860154864865280
 VERIFICATION_QUEUE = discord.Object(id=VERIFICATION_QUEUE_ID)
@@ -343,9 +343,9 @@ async def report(interaction: discord.Interaction):
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.channel.id != VERIFICATION_CHANNEL_ID:
-        return
-    if HIGH_STAFF_ROLE_ID not in [r.id for r in message.author.roles] and OTHER_APPROVER_ROLE_ID not in [r.id for r in message.author.roles]:
+    #if message.channel.id != VERIFICATION_CHANNEL_ID:
+    #    return
+    if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
         return
     await message.delete()
 
