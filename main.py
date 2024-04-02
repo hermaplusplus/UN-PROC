@@ -299,7 +299,7 @@ class Rep(ui.Modal, title="Report"):
                         required=False)
     rson = ui.TextInput(label="What is the reason for the report?",
                         style=discord.TextStyle.long,
-                        placeholder="Please be as detailed as possible. Use filehosts for logs, screenshots, videos, etc. DO NOT USE DISCORD FILE LINKS!",
+                        placeholder="Please be as detailed as possible. Use filehosts (NOT DISCORD!) for logs, screenshots, videos, etc.",
                         max_length=3000)
 
     async def on_submit(self, interaction:discord.Interaction):
