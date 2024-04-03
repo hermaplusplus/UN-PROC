@@ -344,13 +344,14 @@ async def report(interaction: discord.Interaction):
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.channel.id == VERIFICATION_CHANNEL_ID:
-        if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
-            return
-        await message.delete()
+    #if message.author == client.user:
+        #return
+    #if message.channel.id == VERIFICATION_CHANNEL_ID:
+        #if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
+            #return
+        #await message.delete()
     #await message.add_reaction("🗑️")
+    return
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
