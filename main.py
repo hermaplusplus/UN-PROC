@@ -64,7 +64,7 @@ async def on_ready():
     await client.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.playing,
-            name="Dwarf's Dogma 2"
+            name="Atom Smasher"
         )
     )
 
@@ -267,13 +267,16 @@ class Verification(ui.View):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can reject registrations.", ephemeral=True)
             return
         u = interaction.guild.get_member(self.uid)
-        await u.add_roles(discord.Object(REJECT_ROLE_ID))
+        #await u.add_roles(discord.Object(REJECT_ROLE_ID))
         buttons = [b for b in self.children]
         buttons[1].disabled = True
         buttons[1].label = "Rejected"
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
+        await u.send(f"⛔ Your application for access to **Roguetown Development** has been rejected. Re-apply at a later time.")
+        if (1169202970768982076 in [r.id for r in interaction.user.roles]):
+            await u.remove_roles(discord.Object(1169202970768982076))
         self.stop()
 
 class Rep(ui.Modal, title="Report"):
@@ -343,11 +346,10 @@ async def report(interaction: discord.Interaction):
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.channel.id != VERIFICATION_CHANNEL_ID:
-        return
-    if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
-        return
-    await message.delete()
+    if message.channel.id == VERIFICATION_CHANNEL_ID:
+        if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
+            return
+        await message.delete()
     #await message.add_reaction("🗑️")
 
 client.run(SETTINGS['TOKEN'])
