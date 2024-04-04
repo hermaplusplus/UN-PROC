@@ -275,8 +275,8 @@ class Verification(ui.View):
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
         await u.send(f"⛔ Your application for access to **Roguetown Development** has been rejected. Re-apply at a later time.")
-        if (1169202970768982076 in [r.id for r in interaction.user.roles]):
-            await u.remove_roles(discord.Object(1169202970768982076))
+        #if (1169202970768982076 in [r.id for r in interaction.user.roles]):
+        #    await u.remove_roles(discord.Object(1169202970768982076))
         self.stop()
 
 class Rep(ui.Modal, title="Report"):
