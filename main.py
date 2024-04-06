@@ -18,6 +18,8 @@ import math
 
 import os
 
+import subprocess
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -341,6 +343,15 @@ async def report(interaction: discord.Interaction):
         await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
         return
     await interaction.response.send_modal(Rep())
+
+@client.tree.command(description="Displays a list of commands and how to use the bot.")
+async def help(interaction:discord.Interaction):
+    if PROD or interaction.guild.id == 342787099407155202:
+        if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
+            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
+            return
+        ckeylist = subprocess.run("csvtool format '%(2)\n' accountlinks.csv > playerdata.txt".split(" "), capture_output=True)
+        await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:d>.", file=discord.File("playerdata.txt"), ephemeral=True)
 
 @client.event
 async def on_message(message):
