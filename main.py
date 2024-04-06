@@ -344,8 +344,8 @@ async def report(interaction: discord.Interaction):
         return
     await interaction.response.send_modal(Rep())
 
-@client.tree.command(description="Displays a list of commands and how to use the bot.")
-async def help(interaction:discord.Interaction):
+@client.tree.command(description="Generates a list of approved Ckeys.")
+async def playerdata(interaction:discord.Interaction):
     if PROD or interaction.guild.id == 342787099407155202:
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
