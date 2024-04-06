@@ -350,7 +350,7 @@ async def playerdata(interaction:discord.Interaction):
         if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
             return
-        ckeylist = subprocess.run("csvtool format '%(2)\n' accountlinks.csv > playerdata.txt".split(" "), capture_output=True)
+        ckeylist = subprocess.run("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt", capture_output=True)
         await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:d>.", file=discord.File("~/discord/dektown/UN-PROC/playerdata.txt"), ephemeral=True)
 
 @client.event
