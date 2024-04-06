@@ -351,7 +351,7 @@ async def playerdata(interaction:discord.Interaction):
             await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
             return
         os.system("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt")
-        await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:d>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
+        await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:f>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
 
 @client.event
 async def on_message(message):
