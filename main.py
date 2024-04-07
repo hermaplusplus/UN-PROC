@@ -305,7 +305,7 @@ class Rep(ui.Modal, title="Report"):
     rson = ui.TextInput(label="What is the reason for the report?",
                         style=discord.TextStyle.long,
                         placeholder="Please be as detailed as possible. Use filehosts (NOT DISCORD!) for logs, screenshots, videos, etc.",
-                        max_length=3000)
+                        max_length=1000)
 
     async def on_submit(self, interaction:discord.Interaction):
         reporterckey = "Unknown Ckey!"
