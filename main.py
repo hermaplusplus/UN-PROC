@@ -37,6 +37,7 @@ OTHER_APPROVER_ROLE_ID = 1224452065502429206
 APPROVED_ROLE_ID = 1224852178435571774
 REJECT_ROLE_ID = 1224854395464974408
 REPORTS_CHANNEL_ID = 1224860186548895916
+UPTIME_PING_ROLE_ID = 1228522142526869614
 
 PROD = True
 
@@ -158,6 +159,7 @@ async def help(interaction:discord.Interaction):
                                                 f"`/help` shows this message.\n"
                                                 f"`/register` begins the registration process.\n"
                                                 f"`/report` submits a player report.\n"
+                                                f"`/toggleping` toggles the server uptime ping role.\n"
                                                 f"\n"
                                                 f"**FAQ:**\n"
                                                 f"\n"
@@ -352,6 +354,15 @@ async def playerdata(interaction:discord.Interaction):
             return
         os.system("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt")
         await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:f>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
+
+@client.tree.command(description="Toggle the server uptime ping role.")
+async def toggleping(interaction:discord.Interaction):
+    if UPTIME_PING_ROLE_ID not in [r.id for r in interaction.user.roles]:
+        await interaction.user.add_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.response.send_message("You will be pinged for server uptime announcements! 🎺", ephemeral=True)
+    else:
+        await interaction.user.remove_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.response.send_message("You will no longer be pinged for server uptime announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
