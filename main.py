@@ -71,26 +71,51 @@ async def on_ready():
         )
     )
 
-"""
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1130594155597402172  # council
+    1224447318342897664  # admin
 )
-@client.tree.command(description="Shows the age of a BYOND account by Ckey.")
-async def ckey(interaction: discord.Interaction, ckey: str):
+@client.tree.command(description="Shows some details of BYOND account by Ckey and its associated Discord user.")
+async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User]):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
-        try:
-            playerData = getPlayerData(ckey)
-        except:
-            await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
+        if ckey is None and discorduser is None:
+            await interaction.followup.send("You must specify a Ckey or Discord user.", ephemeral=True)
             return
+        if ckey is not None and discorduser is not None:
+            await interaction.followup.send("You must specify only a Ckey or Discord user, not both.", ephemeral=True)
+            return
+        if ckey is not None:
+            try:
+                playerData = getPlayerData(ckey)
+            except:
+                await interaction.followup.send("The Ckey you specified couldn't be found.", ephemeral=True)
+                return
+            with open('accountlinks.csv', 'r') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[1] == ckey:
+                        discorduser = await client.fetch_user(int(row[0]))
+                        break
+        if discorduser is not None:
+            with open('accountlinks.csv', 'r') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[0] == str(discorduser.id):
+                        ckey = row[1]
+                        break
+            try:
+                playerData = getPlayerData(ckey)
+            except:
+                await interaction.followup.send(f"The ckey associated with {discorduser.mention} could not be found! **Please contact <@188796089380503555> about this immediately!**", ephemeral=True)
+                return
         ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
         embs = []
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
+        emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
@@ -102,7 +127,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"{activebans} active, {totalbans-activebans} expired bans found on CCDB.", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{ckey.replace(' ', '%20')})", inline=True)
         embs.append(emb)
         await interaction.followup.send(embeds=embs, ephemeral=True)
     else:
@@ -110,7 +135,7 @@ async def ckey(interaction: discord.Interaction, ckey: str):
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1130594155597402172  # council
+    1224447318342897664  # admin
 )
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
@@ -150,7 +175,6 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
             await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True)
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
-"""
 
 @client.tree.command(description="Displays a list of commands and how to use the bot.")
 async def help(interaction:discord.Interaction):
