@@ -54,7 +54,7 @@ Q: *Who should I direct technical questions to?*
 A: <@188796089380503555>.
 
 Q: *How can I help pay for the upkeep of the bot?*
-A: https://sponsor.herma.moe/",
+A: https://sponsor.herma.moe/
 """
 
 STAFF_HELP_MESSAGE = """
@@ -75,7 +75,7 @@ Q: *Who should I direct technical questions to?*
 A: <@188796089380503555>.
 
 Q: *How can I help pay for the upkeep of the bot?*
-A: https://sponsor.herma.moe/",
+A: https://sponsor.herma.moe/
 """
 
 class Client(discord.Client):
