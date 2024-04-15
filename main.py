@@ -94,7 +94,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
             with open('accountlinks.csv', 'r') as file:
                 reader = csv.reader(file)
                 for row in reader:
-                    if row[1] == ckey:
+                    if ''.join(ch for ch in row[1] if ch.isalnum()).lower() == ''.join(ch for ch in ckey if ch.isalnum()).lower():
                         discorduser = await client.fetch_user(int(row[0]))
                         break
         if discorduser is not None:
