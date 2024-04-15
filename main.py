@@ -65,7 +65,7 @@ STAFF_HELP_MESSAGE = """
 `/toggleping` toggles the server uptime ping role.
 
 **Staff Commands:**
-`/ckey` shows some details of BYOND account by Ckey and its associated Discord user.
+`/lookup` shows some details of BYOND account by Ckey and its associated Discord user.
 `/ccdb` lists CCDB bans for a BYOND account by Ckey.
 `/playerdata` generates a list of approved Ckeys.
 
