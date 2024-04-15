@@ -41,6 +41,43 @@ UPTIME_PING_ROLE_ID = 1228522142526869614
 
 PROD = True
 
+HELP_MESSAGE = """
+**Commands:**
+`/help` shows this message.
+`/register` begins the registration process.
+`/report` submits a player report.
+`/toggleping` toggles the server uptime ping role.
+
+**FAQ:**
+
+Q: *Who should I direct technical questions to?*
+A: <@188796089380503555>.
+
+Q: *How can I help pay for the upkeep of the bot?*
+A: https://sponsor.herma.moe/",
+"""
+
+STAFF_HELP_MESSAGE = """
+**Commands:**
+`/help` shows this message.
+`/register` begins the registration process.
+`/report` submits a player report.
+`/toggleping` toggles the server uptime ping role.
+
+**Staff Commands:**
+`/ckey` shows some details of BYOND account by Ckey and its associated Discord user.
+`/ccdb` lists CCDB bans for a BYOND account by Ckey.
+`/playerdata` generates a list of approved Ckeys.
+
+**FAQ:**
+
+Q: *Who should I direct technical questions to?*
+A: <@188796089380503555>.
+
+Q: *How can I help pay for the upkeep of the bot?*
+A: https://sponsor.herma.moe/",
+"""
+
 class Client(discord.Client):
 
     def __init__(self, *, intents: discord. Intents):
@@ -179,20 +216,10 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
 @client.tree.command(description="Displays a list of commands and how to use the bot.")
 async def help(interaction:discord.Interaction):
     if PROD or interaction.guild.id == 342787099407155202:
-        await interaction.response.send_message(f"**Commands:**\n"
-                                                f"`/help` shows this message.\n"
-                                                f"`/register` begins the registration process.\n"
-                                                f"`/report` submits a player report.\n"
-                                                f"`/toggleping` toggles the server uptime ping role.\n"
-                                                f"\n"
-                                                f"**FAQ:**\n"
-                                                f"\n"
-                                                f"Q: *Who should I direct technical questions to?*\n"
-                                                f"A: <@188796089380503555>.\n"
-                                                f"\n"
-                                                f"Q: *How can I help pay for the upkeep of the bot?*\n"
-                                                f"A: https://sponsor.herma.moe/",
-                                                ephemeral=True)
+        if 1224447318342897664 in [r.id for r in interaction.user.roles]:
+            await interaction.response.send_message(STAFF_HELP_MESSAGE, ephemeral=True)
+        else:
+            await interaction.response.send_message(HELP_MESSAGE, ephemeral=True)
     else:
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
 
