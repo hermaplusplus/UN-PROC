@@ -275,7 +275,8 @@ class Reg(ui.Modal, title="Registration"):
         emb.add_field(name="Why do you want to join RogueTown?", value=f"```{self.interest.value}```", inline=False)
         emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
-        emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=False)
+        emb.add_field(name="Ckey Created", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
+        emb.add_field(name="Discord Created", value=f"<t:{int((interaction.user.created_at).timestamp())}:d> (<t:{int((interaction.user.created_at).timestamp())}:R>)", inline=True)
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
