@@ -152,7 +152,10 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
         emb = discord.Embed()
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
-        emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
+        if discorduser is not None:
+            emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
+        else:
+            emb.add_field(name="Associated Discord", value=f"Not registered!", inline=True)
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
