@@ -243,11 +243,11 @@ class Reg(ui.Modal, title="Registration"):
                             style=discord.TextStyle.short,
                             placeholder="DD-MM-YYYY",
                             max_length=10)
-    origin   = ui.TextInput(label="How did you find RT? If invited, by who?",
+    origin   = ui.TextInput(label="How did you find SK? If invited, by who?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
-    interest = ui.TextInput(label="Why do you want to join RogueTown?",
+    interest = ui.TextInput(label="Why do you want to join StoneKeep?",
                             style=discord.TextStyle.long,
                             placeholder="",
                             max_length=1000)
