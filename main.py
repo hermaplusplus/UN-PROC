@@ -333,7 +333,7 @@ class Verification(ui.View):
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
-        await u.send(f"⛔ Your application for access to **Roguetown Development** has been rejected. Re-apply at a later time.")
+        await u.send(f"⛔ Your application for access to **StoneKeep** has been rejected. Re-apply at a later time.")
         #if (1169202970768982076 in [r.id for r in interaction.user.roles]):
         #    await u.remove_roles(discord.Object(1169202970768982076))
         self.stop()
