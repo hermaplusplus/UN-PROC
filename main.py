@@ -38,6 +38,7 @@ APPROVED_ROLE_ID = 1224852178435571774
 REJECT_ROLE_ID = 1224854395464974408
 REPORTS_CHANNEL_ID = 1224860186548895916
 UPTIME_PING_ROLE_ID = 1228522142526869614
+RESTART_CHANNEL_ID = 1224860154864865280
 
 PROD = True
 
@@ -107,6 +108,7 @@ async def on_ready():
             name="Atom Smasher"
         )
     )
+    await client.get_channel(RESTART_CHANNEL_ID).send("⚠ **Bot restarted!** Any unprocessed registrations have been orphaned.\nInstruct applicants to reapply or contact <@188796089380503555> for manual approval.")
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
