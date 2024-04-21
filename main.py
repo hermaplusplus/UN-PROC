@@ -247,11 +247,11 @@ class Reg(ui.Modal, title="Registration"):
                             max_length=10)
     origin   = ui.TextInput(label="How did you find SK? If invited, by who?",
                             style=discord.TextStyle.long,
-                            placeholder="",
+                            placeholder="Specify the person who invited you, or where you found an invite.",
                             max_length=1000)
     interest = ui.TextInput(label="Why do you want to join StoneKeep?",
                             style=discord.TextStyle.long,
-                            placeholder="",
+                            placeholder="Short responses will be rejected. Aim for at least a paragraph.",
                             max_length=1000)
     agreement    = ui.TextInput(label="Do you agree to abide by the rules?",
                             style=discord.TextStyle.short,
