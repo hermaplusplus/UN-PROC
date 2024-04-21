@@ -228,14 +228,6 @@ async def help(interaction:discord.Interaction):
     else:
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
 
-@client.tree.error
-async def on_app_command_error(interaction, error):
-    if isinstance(error, app_commands.MissingAnyRole):
-        await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
-    else:
-        #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
-        raise error
-
 class Reg(ui.Modal, title="Registration"):
     ckey     = ui.TextInput(label="What is your Ckey (BYOND username)?)",
                             style=discord.TextStyle.short,
@@ -430,6 +422,21 @@ async def on_message(message):
             return
         await message.delete()
     #await message.add_reaction("🗑️")
+
+@client.tree.error
+async def on_app_command_error(interaction, error):
+    if isinstance(error, app_commands.MissingAnyRole):
+        await interaction.response.send_message("You don't have permission to use this command!", ephemeral=True)
+    else:
+        #await interaction.response.send_message("⚠ An unknown error occurred! If this continues to happen, please contact <@188796089380503555>.", ephemeral=True)
+        await client.change_presence(
+            status=discord.Status.dnd,
+            activity=discord.Activity(
+                type=discord.ActivityType.playing,
+                name="Atom Smasher"
+            )
+        )
+        raise error
 
 client.run(SETTINGS['TOKEN'])
 #print(SETTINGS['TOKEN'])
