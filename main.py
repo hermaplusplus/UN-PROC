@@ -310,6 +310,7 @@ class Verification(ui.View):
         self.remove_item(buttons[1])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
+        await u.send(f"✅ Your application for access to **StoneKeep** has been approved. This is your penance.")
         os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
         self.stop()
 
