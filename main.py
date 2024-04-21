@@ -108,7 +108,7 @@ async def on_ready():
             name="Atom Smasher"
         )
     )
-    await client.get_channel(RESTART_CHANNEL_ID).send("⚠ **Bot restarted!** Any unprocessed registrations have been orphaned.\nInstruct applicants to reapply or contact <@188796089380503555> for manual approval.")
+    await client.get_channel(RESTART_CHANNEL_ID).send(":arrows_counterclockwise: **Bot restarted!** Any unprocessed registrations have been orphaned. Instruct applicants to reapply or contact <@188796089380503555> for manual approval.", silent=True)
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
