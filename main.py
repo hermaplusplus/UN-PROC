@@ -112,7 +112,8 @@ async def on_ready():
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1224447318342897664  # admin
+    1224447318342897664, # admin
+    1231424937315536896  # mod
 )
 @client.tree.command(description="Shows some details of BYOND account by Ckey and its associated Discord user.")
 async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User]):
@@ -177,7 +178,8 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1224447318342897664  # admin
+    1224447318342897664, # admin
+    1231424937315536896  # mod
 )
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1):
