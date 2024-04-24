@@ -391,12 +391,12 @@ async def register(interaction: discord.Interaction):
         return
     await interaction.response.send_modal(Reg())
 
-@client.tree.command(description="Submit a player report.")
-async def report(interaction: discord.Interaction):
-    if APPROVED_ROLE_ID not in [r.id for r in interaction.user.roles]:
-        await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
-        return
-    await interaction.response.send_modal(Rep())
+#@client.tree.command(description="Submit a player report.")
+#async def report(interaction: discord.Interaction):
+#    if APPROVED_ROLE_ID not in [r.id for r in interaction.user.roles]:
+#        await interaction.response.send_message("Unapproved members cannot use this command.", ephemeral=True)
+#        return
+#    await interaction.response.send_modal(Rep())
 
 @client.tree.command(description="Generates a list of approved Ckeys.")
 async def playerdata(interaction:discord.Interaction):
