@@ -35,10 +35,11 @@ HIGH_STAFF_ROLE_ID = 1224447318342897664
 OTHER_APPROVER_REFER = "Server Moderators"
 OTHER_APPROVER_ROLE_ID = 1224452065502429206
 APPROVED_ROLE_ID = 1224852178435571774
-REJECT_ROLE_ID = 1224854395464974408
+REJECT_ROLE_ID = 1233520171038019675
 REPORTS_CHANNEL_ID = 1224860186548895916
 UPTIME_PING_ROLE_ID = 1228522142526869614
 RESTART_CHANNEL_ID = 1224860154864865280
+GALLOWS_CHANNEL_ID = 1233520545543487609
 
 PROD = True
 
@@ -312,8 +313,11 @@ class Verification(ui.View):
         self.remove_item(buttons[1])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
-        await u.send(f"✅ Your application for access to **StoneKeep** has been approved. This is your penance.")
         os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
+        try:
+            await u.send(f"✅ Your application for access to **StoneKeep** has been approved. This is your penance.")
+        except:
+            await interaction.followup.send(f"⚠️ Failed to DM <@{self.uid}> regarding their approval.")
         self.stop()
 
     @ui.button(label="Reject", style=discord.ButtonStyle.red, custom_id=f"reject")
@@ -330,9 +334,14 @@ class Verification(ui.View):
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
-        await u.send(f"⛔ Your application for access to **StoneKeep** has been rejected. Re-apply at a later time.")
+        try:
+            await u.send(f"⛔ Your application for access to **StoneKeep** has been rejected. Re-apply at a later time.")
+        except:
+            await interaction.followup.send(f"⚠️ Failed to DM <@{self.uid}> regarding their rejection.")
         #if (1169202970768982076 in [r.id for r in interaction.user.roles]):
         #    await u.remove_roles(discord.Object(1169202970768982076))
+        u = interaction.guild.get_member(self.uid)
+        await u.add_roles(discord.Object(APPROVED_ROLE_ID))
         self.stop()
 
 class Rep(ui.Modal, title="Report"):
@@ -424,6 +433,10 @@ async def on_message(message):
         if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
             return
         await message.delete()
+    if message.channel.id == GALLOWS_CHANNEL_ID:
+        if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
+            return
+        await message.delete(delay=300)
     #await message.add_reaction("🗑️")
 
 @client.tree.error
