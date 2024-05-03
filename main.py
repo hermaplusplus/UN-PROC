@@ -160,7 +160,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
         if discorduser is not None:
             emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
             emb.add_field(name="Discord Created", value=f"<t:{int((discorduser.created_at).timestamp())}:d> (<t:{int((discorduser.created_at).timestamp())}:R>)", inline=True)
-            emb.add_field(name="\u200B", value="\u200B")
+            emb.add_field(name="\u200B", value="\u200B", inline=False)
         else:
             emb.add_field(name="Associated Discord", value=f"Not registered!", inline=False)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
