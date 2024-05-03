@@ -121,7 +121,7 @@ async def on_ready():
 @app_commands.describe(public="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Shows some details of BYOND account by Ckey and its associated Discord user.")
 async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User], public: Optional[bool] = True):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=True if not public else False)
     if PROD or interaction.guild.id == 342787099407155202:
         if ckey is None and discorduser is None:
             await interaction.followup.send("You must specify a Ckey or Discord user.", ephemeral=True)
@@ -190,7 +190,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
 @app_commands.describe(public="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1, public: Optional[bool] = True):
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer(ephemeral=True if not public else False)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
             playerData = getPlayerData(ckey)
