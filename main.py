@@ -118,7 +118,7 @@ async def on_ready():
 )
 @app_commands.describe(ckey="BYOND Username")
 @app_commands.describe(discorduser="Discord User")
-@app_commands.describe(pub="If enabled, the output will be visible to all users.")
+@app_commands.describe(public="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Shows some details of BYOND account by Ckey and its associated Discord user.")
 async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User], public: Optional[bool] = True):
     await interaction.response.defer(ephemeral=True)
@@ -187,7 +187,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
 )
 @app_commands.describe(ckey="BYOND Username")
 @app_commands.describe(page="Page Number")
-@app_commands.describe(pub="If enabled, the output will be visible to all users.")
+@app_commands.describe(public="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
 async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1, public: Optional[bool] = True):
     await interaction.response.defer(ephemeral=True)
