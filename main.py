@@ -176,7 +176,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{ckey.replace(' ', '%20')})", inline=True)
         embs.append(emb)
-        await interaction.followup.send(embeds=embs, ephemeral=True if public else False)
+        await interaction.followup.send(embeds=embs, ephemeral=True if not public else False)
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
@@ -218,12 +218,12 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
                     emb.add_field(name="Unbanned By", value=f"{ban['unbannedBy']}", inline=True)
                 embs.append(emb)
         if len(embs) == 0:
-            await interaction.followup.send(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if public else False)
+            await interaction.followup.send(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if not public else False)
         if len(embs) > 0 and len(embs) <= 10:
-            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if public else False)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if not public else False)
         if len(embs) > 10:
             maxpages = math.ceil(len(embs)/10)
-            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True if public else False)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True if not public else False)
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
