@@ -116,14 +116,11 @@ async def on_ready():
     1224447318342897664, # admin
     1231424937315536896  # mod
 )
-@app_commands.rename(ckey="Ckey")
 @app_commands.describe(ckey="BYOND Username")
-@app_commands.rename(discorduser="Discord User")
 @app_commands.describe(discorduser="Discord User")
-@app_commands.rename(pub="Show to all?")
 @app_commands.describe(pub="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Shows some details of BYOND account by Ckey and its associated Discord user.")
-async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User], pub: Optional[bool] = True):
+async def lookup(interaction: discord.Interaction, ckey: Optional[str], discorduser: Optional[discord.User], public: Optional[bool] = True):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         if ckey is None and discorduser is None:
@@ -179,7 +176,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{ckey.replace(' ', '%20')})", inline=True)
         embs.append(emb)
-        await interaction.followup.send(embeds=embs, ephemeral=True if pub else False)
+        await interaction.followup.send(embeds=embs, ephemeral=True if public else False)
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
@@ -188,14 +185,11 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
     1224447318342897664, # admin
     1231424937315536896  # mod
 )
-@app_commands.rename(ckey="Ckey")
 @app_commands.describe(ckey="BYOND Username")
-@app_commands.rename(page="Page")
 @app_commands.describe(page="Page Number")
-@app_commands.rename(pub="Show to all?")
 @app_commands.describe(pub="If enabled, the output will be visible to all users.")
 @client.tree.command(description="Lists CCDB bans for a BYOND account by Ckey. Pagination begins at 1. Times displayed are in UTC.")
-async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1, pub: Optional[bool] = True):
+async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] = 1, public: Optional[bool] = True):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
         try:
@@ -224,12 +218,12 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
                     emb.add_field(name="Unbanned By", value=f"{ban['unbannedBy']}", inline=True)
                 embs.append(emb)
         if len(embs) == 0:
-            await interaction.followup.send(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if pub else False)
+            await interaction.followup.send(f"No bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if public else False)
         if len(embs) > 0 and len(embs) <= 10:
-            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if pub else False)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**.", embeds=embs, ephemeral=True if public else False)
         if len(embs) > 10:
             maxpages = math.ceil(len(embs)/10)
-            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True if pub else False)
+            await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True if public else False)
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
