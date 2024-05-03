@@ -158,7 +158,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
         if discorduser is not None:
-            emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
+            emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=False)
             emb.add_field(name="Discord Created", value=f"<t:{int((discorduser.created_at).timestamp())}:d> (<t:{int((discorduser.created_at).timestamp())}:R>)", inline=True)
             emb.add_field(name="\u200B", value="\u200B")
         else:
