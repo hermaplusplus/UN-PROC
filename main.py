@@ -163,14 +163,13 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
             emb.add_field(name="\u200B", value="\u200B")
         else:
             emb.add_field(name="Associated Discord", value=f"Not registered!", inline=False)
-            emb.add_field(name="\u200B", value="\u200B")
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         if ccdb.status_code == 200:
-            emb.add_field(name="\u200B", value="\u200B")
+            #emb.add_field(name="\u200B", value="\u200B")
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
-                emb.add_field(name="CCDB Bans", value=f"No bans found on CCDB.", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"No bans found on CCDB.", inline=False)
             else:
                 activebans = 0
                 totalbans = 0
@@ -178,7 +177,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
                     if ban['active']:
                         activebans += 1
                     totalbans += 1
-                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{ckey.replace(' ', '%20')})", inline=True)
+                emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{ckey.replace(' ', '%20')})", inline=False)
         embs.append(emb)
         await interaction.followup.send(embeds=embs, ephemeral=True if not public else False)
     else:
