@@ -157,12 +157,15 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
         embs = []
         #emb = discord.Embed(title=playerData['key'])
         emb = discord.Embed()
-        emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         if discorduser is not None:
             emb.add_field(name="Associated Discord", value=f"{discorduser.mention}", inline=True)
+            emb.add_field(name="Discord Created", value=f"<t:{int((discorduser.created_at).timestamp())}:d> (<t:{int((discorduser.created_at).timestamp())}:R>)", inline=True)
+            emb.add_field(name="\u200B", value="\u200B")
         else:
             emb.add_field(name="Associated Discord", value=f"Not registered!", inline=True)
+            emb.add_field(name="\u200B", value="\u200B")
+        emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
+        emb.add_field(name="Account Creation Date", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         if ccdb.status_code == 200:
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
