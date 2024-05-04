@@ -73,6 +73,7 @@ async def on_ready():
         if member.bot:
             continue
         if 1224852178435571774 in [r.id for r in member.roles]:
-            print(f"{member.name}")
+            if not (await check_approval(member.id)):
+                await print(f"Remove {member.display_name}")
 
 client.run(SETTINGS['TOKEN'])
