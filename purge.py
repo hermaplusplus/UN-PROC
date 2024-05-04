@@ -75,6 +75,6 @@ async def on_ready():
         if 1224852178435571774 in [r.id for r in member.roles]:
             approved = await check_approval(str(member.id))
             if not approved:
-                await print(f"Remove {member.display_name}")
+                print(f"Remove {member.display_name}")
 
 client.run(SETTINGS['TOKEN'])
