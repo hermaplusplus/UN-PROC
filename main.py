@@ -323,12 +323,12 @@ class Verification(ui.View):
         buttons[0].label = "Accepted"
         self.remove_item(buttons[1])
         await interaction.followup.edit_message(interaction.message.id, view=self)
-        await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
         os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
         try:
             await u.send(f"✅ Your application for access to **StoneKeep** has been approved. This is your penance.")
+            await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
         except:
-            await interaction.followup.send(f"⚠️ Failed to DM <@{self.uid}> regarding their approval.")
+            await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.\n⚠️ Failed to DM <@{self.uid}> regarding their approval.")
         self.stop()
 
     @ui.button(label="Reject", style=discord.ButtonStyle.red, custom_id=f"reject")
@@ -344,11 +344,11 @@ class Verification(ui.View):
         buttons[1].label = "Rejected"
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
-        await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")
         try:
             await u.send(f"⛔ Your application for access to **StoneKeep** has been rejected. Re-apply at a later time.")
+            await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")        
         except:
-            await interaction.followup.send(f"⚠️ Failed to DM <@{self.uid}> regarding their rejection.")
+            await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.\n⚠️ Failed to DM <@{self.uid}> regarding their rejection.")
         #if (1169202970768982076 in [r.id for r in interaction.user.roles]):
         #    await u.remove_roles(discord.Object(1169202970768982076))
         #u = interaction.guild.get_member(self.uid)
