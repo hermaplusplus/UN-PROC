@@ -351,8 +351,8 @@ class Verification(ui.View):
             await interaction.followup.send(f"⚠️ Failed to DM <@{self.uid}> regarding their rejection.")
         #if (1169202970768982076 in [r.id for r in interaction.user.roles]):
         #    await u.remove_roles(discord.Object(1169202970768982076))
-        u = interaction.guild.get_member(self.uid)
-        await u.add_roles(discord.Object(APPROVED_ROLE_ID))
+        #u = interaction.guild.get_member(self.uid)
+        #await u.add_roles(discord.Object(APPROVED_ROLE_ID))
         self.stop()
 
 class Rep(ui.Modal, title="Report"):
