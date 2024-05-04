@@ -69,7 +69,7 @@ async def check_approval(id):
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user} (ID: {client.user.id})")
-    for member in discord.Object(id=1169125844246069298).members:
+    for member in client.get_guild(1169125844246069298).members:
         if member.bot:
             continue
         if 1224852178435571774 in [r.id for r in member.roles]:
