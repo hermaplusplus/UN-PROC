@@ -20,6 +20,8 @@ import os
 
 import subprocess
 
+import asyncio
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -75,6 +77,13 @@ async def on_ready():
         if 1224852178435571774 in [r.id for r in member.roles]:
             approved = await check_approval(str(member.id))
             if not approved:
-                print(f"Remove {member.display_name}")
+                await member.remove_roles(discord.Object(id=1224852178435571774))
+                try:
+                    await member.send("🛂 Your access to **StoneKeep** has been revoked due to a mistakenly assigned access role, despite your registration being rejected.\nIf you would like to re-apply, please visit https://ptb.discord.com/channels/1169125844246069298/1224863354590593087 \nIf you believe this has been done in error, please contact <@188796089380503555> (@herma).")
+                    await client.get_channel(1224860154864865280).send(f"🛂 User {member.mention}'s access has been revoked due to mistakenly assigned access. For more information, see https://discord.com/channels/1169125844246069298/1224447920376385587/1236361409152024606")
+                except:
+                    await client.get_channel(1224860154864865280).send(f"🛂 User {member.mention}'s access has been revoked due to mistakenly assigned access. For more information, see https://discord.com/channels/1169125844246069298/1224447920376385587/1236361409152024606 \n⚠️ Failed to DM {member.mention} regarding their access revocation.")
+                print(f"Revoked access for @{member.name} '{member.display_name}' ({member.id}).")
+                await asyncio.sleep(5)
 
 client.run(SETTINGS['TOKEN'])
