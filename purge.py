@@ -84,6 +84,8 @@ async def on_ready():
                 except:
                     await client.get_channel(1224860154864865280).send(f"🛂 User {member.mention}'s access has been revoked due to mistakenly assigned access. For more information, see https://discord.com/channels/1169125844246069298/1224447920376385587/1236361409152024606 \n⚠️ Failed to DM {member.mention} regarding their access revocation.")
                 print(f"Revoked access for @{member.name} '{member.display_name}' ({member.id}).")
-                await asyncio.sleep(5)
+                await asyncio.sleep(1)
+    print("Purge complete. Goodbye!")
+    exit()
 
 client.run(SETTINGS['TOKEN'])
