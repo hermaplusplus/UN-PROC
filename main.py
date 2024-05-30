@@ -20,6 +20,8 @@ import os
 
 import subprocess
 
+import random
+
 SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
@@ -447,7 +449,10 @@ async def on_message(message):
     if message.channel.id == GALLOWS_CHANNEL_ID:
         if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
             return
-        await message.delete(delay=300)
+        await message.delete(delay=900)
+    if message.channel.id == 1237644625783554171:
+        if "byond://play.stonekeep.xyz:1218" in message.content:
+            await message.channel.send(file=discord.File(f"images/{random.randint(0, 23)}.png"))
     #await message.add_reaction("🗑️")
 
 @client.tree.error
