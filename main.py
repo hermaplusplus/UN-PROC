@@ -443,10 +443,10 @@ async def toggleping(interaction:discord.Interaction):
 @client.tree.command(description="Toggle the content update ping role.")
 async def toggledevping(interaction:discord.Interaction):
     if DEV_PING_ROLE_ID not in [r.id for r in interaction.user.roles]:
-        await interaction.user.add_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.user.add_roles(discord.Object(DEV_PING_ROLE_ID))
         await interaction.response.send_message("You will be pinged for content update announcements! 🎺", ephemeral=True)
     else:
-        await interaction.user.remove_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.user.remove_roles(discord.Object(DEV_PING_ROLE_ID))
         await interaction.response.send_message("You will no longer be pinged for content update announcements. 💤", ephemeral=True)
 
 @client.event
