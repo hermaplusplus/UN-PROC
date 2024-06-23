@@ -40,6 +40,7 @@ APPROVED_ROLE_ID = 1224852178435571774
 REJECT_ROLE_ID = 1233520171038019675
 REPORTS_CHANNEL_ID = 1224860186548895916
 UPTIME_PING_ROLE_ID = 1228522142526869614
+DEV_PING_ROLE_ID = 1254571363004321904
 RESTART_CHANNEL_ID = 1224860154864865280
 GALLOWS_CHANNEL_ID = 1233520545543487609
 
@@ -51,6 +52,7 @@ HELP_MESSAGE = """
 `/register` begins the registration process.
 `/report` submits a player report.
 `/toggleping` toggles the server uptime ping role.
+`/toggledevping` toggles the content update ping role.
 
 **FAQ:**
 
@@ -437,6 +439,15 @@ async def toggleping(interaction:discord.Interaction):
     else:
         await interaction.user.remove_roles(discord.Object(UPTIME_PING_ROLE_ID))
         await interaction.response.send_message("You will no longer be pinged for server uptime announcements. 💤", ephemeral=True)
+
+@client.tree.command(description="Toggle the content update ping role.")
+async def toggledevping(interaction:discord.Interaction):
+    if DEV_PING_ROLE_ID not in [r.id for r in interaction.user.roles]:
+        await interaction.user.add_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.response.send_message("You will be pinged for content update announcements! 🎺", ephemeral=True)
+    else:
+        await interaction.user.remove_roles(discord.Object(UPTIME_PING_ROLE_ID))
+        await interaction.response.send_message("You will no longer be pinged for content update announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
