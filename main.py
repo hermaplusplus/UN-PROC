@@ -174,7 +174,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
             emb.add_field(name="Ckey", value=f"Not registered!", inline=False)
         if ckey is not None:
             emb.add_field(name="\u200B", value="\u200B")
-        if ccdb.status_code == 200:
+        if ccdb.status_code == 200 and ckey is not None:
             #emb.add_field(name="\u200B", value="\u200B")
             ccdbdata = ccdb.json()
             if len(ccdbdata) == 0:
