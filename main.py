@@ -463,12 +463,13 @@ async def toggledevping(interaction:discord.Interaction):
 ])
 async def toggleping(interaction:discord.Interaction, role: int):
     role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID][role]
+    role_name = ["server uptime", "content update", "event"][role]
     if role_id not in [r.id for r in interaction.user.roles]:
         await interaction.user.add_roles(discord.Object(role_id))
-        await interaction.response.send_message(f"You will be pinged for {role.name} announcements! 🎺", ephemeral=True)
+        await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
     else:
         await interaction.user.remove_roles(discord.Object(role_id))
-        await interaction.response.send_message(f"You will no longer be pinged for {role.name} announcements. 💤", ephemeral=True)
+        await interaction.response.send_message(f"You will no longer be pinged for {role_name} announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
