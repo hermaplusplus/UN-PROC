@@ -457,11 +457,12 @@ async def toggledevping(interaction:discord.Interaction):
 
 @client.tree.command(description="Toggle an optional role.")
 @app_commands.choices(role=[
-    app_commands.Choice(name='Uptime', value=UPTIME_PING_ROLE_ID),
-    app_commands.Choice(name='Content', value=DEV_PING_ROLE_ID),
-    app_commands.Choice(name='Event', value=EVENT_PING_ROLE_ID)
+    app_commands.Choice(name='Uptime', value=0),
+    app_commands.Choice(name='Content', value=1),
+    app_commands.Choice(name='Event', value=2)
 ])
 async def toggleping(interaction:discord.Interaction, role: app_commands.Choice[int]):
+    role = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID][role]
     if role.value not in [r.id for r in interaction.user.roles]:
         await interaction.user.add_roles(discord.Object(role.value))
         await interaction.response.send_message(f"You will be pinged for {role.name} announcements! 🎺", ephemeral=True)
