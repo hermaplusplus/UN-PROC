@@ -463,7 +463,7 @@ async def toggledevping(interaction:discord.Interaction):
 ])
 async def toggleping(interaction:discord.Interaction, role: int):
     role = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID][role]
-    if role.value not in [r.id for r in interaction.user.roles]:
+    if role not in [r.id for r in interaction.user.roles]:
         await interaction.user.add_roles(discord.Object(role.value))
         await interaction.response.send_message(f"You will be pinged for {role.name} announcements! 🎺", ephemeral=True)
     else:
