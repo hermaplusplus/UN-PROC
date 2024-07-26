@@ -41,6 +41,7 @@ REJECT_ROLE_ID = 1233520171038019675
 REPORTS_CHANNEL_ID = 1224860186548895916
 UPTIME_PING_ROLE_ID = 1228522142526869614
 DEV_PING_ROLE_ID = 1254571363004321904
+EVENT_PING_ROLE_ID = 1266199405187301406
 RESTART_CHANNEL_ID = 1224860154864865280
 GALLOWS_CHANNEL_ID = 1233520545543487609
 
@@ -434,6 +435,7 @@ async def playerdata(interaction:discord.Interaction):
         os.system("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt")
         await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:f>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
 
+"""
 @client.tree.command(description="Toggle the server uptime ping role.")
 async def toggleping(interaction:discord.Interaction):
     if UPTIME_PING_ROLE_ID not in [r.id for r in interaction.user.roles]:
@@ -451,6 +453,21 @@ async def toggledevping(interaction:discord.Interaction):
     else:
         await interaction.user.remove_roles(discord.Object(DEV_PING_ROLE_ID))
         await interaction.response.send_message("You will no longer be pinged for content update announcements. 💤", ephemeral=True)
+"""
+
+@client.tree.command(description="Toggle an optional role.")
+@app_commands.choices(role=[
+    app_commands.Choice(name='Uptime', value=UPTIME_PING_ROLE_ID),
+    app_commands.Choice(name='Content', value=DEV_PING_ROLE_ID),
+    app_commands.Choice(name='Event', value=EVENT_PING_ROLE_ID)
+])
+async def toggleping(interaction:discord.Interaction, role: app_commands.Choice[int]):
+    if role.value not in [r.id for r in interaction.user.roles]:
+        await interaction.user.add_roles(discord.Object(role.value))
+        await interaction.response.send_message(f"You will be pinged for {role.name} announcements! 🎺", ephemeral=True)
+    else:
+        await interaction.user.remove_roles(discord.Object(role.value))
+        await interaction.response.send_message(f"You will no longer be pinged for {role.name} announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
