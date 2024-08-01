@@ -42,6 +42,7 @@ REPORTS_CHANNEL_ID = 1224860186548895916
 UPTIME_PING_ROLE_ID = 1228522142526869614
 DEV_PING_ROLE_ID = 1254571363004321904
 EVENT_PING_ROLE_ID = 1266199405187301406
+WAR_PING_ROLE_ID = 1268717495213101096
 RESTART_CHANNEL_ID = 1224860154864865280
 GALLOWS_CHANNEL_ID = 1233520545543487609
 
@@ -459,11 +460,12 @@ async def toggledevping(interaction:discord.Interaction):
 @app_commands.choices(role=[
     app_commands.Choice(name='server uptime', value=0),
     app_commands.Choice(name='content update', value=1),
-    app_commands.Choice(name='event', value=2)
+    app_commands.Choice(name='event', value=2),
+    app_commands.Choice(name='warmonger', value=3)
 ])
 async def toggleping(interaction:discord.Interaction, role: int):
-    role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID][role]
-    role_name = ["server uptime", "content update", "event"][role]
+    role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID, WAR_PING_ROLE_ID][role]
+    role_name = ["server uptime", "content update", "event", "warmonger"][role]
     if role_id not in [r.id for r in interaction.user.roles]:
         await interaction.user.add_roles(discord.Object(role_id))
         await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
