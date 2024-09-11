@@ -477,7 +477,7 @@ async def toggleping(interaction:discord.Interaction, role: int):
 async def on_message(message):
     if message.channel.id == 1237644625783554171:
         if "byond://play.stonekeep.xyz:1218" in message.content:
-            await message.channel.send(file=discord.File(f"images/{random.randint(0, 23)}.png"))
+            await message.channel.send(file=discord.File(f"images/{random.randint(0, 28)}.png"))
     if message.author == client.user:
         return
     if message.channel.id == VERIFICATION_CHANNEL_ID:
