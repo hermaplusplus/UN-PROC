@@ -157,7 +157,7 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
             try:
                 playerData = getPlayerData(ckey)
             except:
-                await interaction.followup.send(f"The ckey associated with {discorduser.mention} could not be found! **Please contact <@188796089380503555> about this immediately!**", ephemeral=True)
+                await interaction.followup.send(f"The ckey associated with {discorduser.mention} could not be found!\n## Please contact <@188796089380503555> about this immediately!", ephemeral=True)
                 return
         ccdb = requests.get(f"https://centcom.melonmesa.com/ban/search/{ckey}")
         embs = []
