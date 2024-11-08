@@ -260,9 +260,12 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
 async def dcar(interaction: discord.Interaction, discorduser: discord.User, reason: str):
     await interaction.response.defer(ephemeral=True)
     if PROD or interaction.guild.id == 342787099407155202:
-        await discorduser.add_roles(discord.Object(DCAR_ID))
-        await interaction.followup.send(f"{discorduser.mention}'s access to public development channels has been restricted.", ephemeral=True)
-        await client.get_channel(MOD_LOG_ID).send(f"Actioning user: {interaction.user.mention}\nActioned user: {discorduser.mention}\nReason:\n>>> {reason}")
+        if DCAR_ID in [r.id for r in discorduser.roles]:
+            await interaction.followup.send(f"{discorduser.mention}'s access has already been restricted.", ephemeral=True)
+        else:
+            await discorduser.add_roles(discord.Object(DCAR_ID))
+            await interaction.followup.send(f"{discorduser.mention}'s access to public development channels has been restricted.", ephemeral=True)
+            await client.get_channel(MOD_LOG_ID).send(f"**Developer Channel Access Restriction**\nActioning user: {interaction.user.mention}\nActioned user: {discorduser.mention}\nAction taken: Added DCAR role.\nReason:\n>>> {reason}")
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
