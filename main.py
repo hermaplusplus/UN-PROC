@@ -45,6 +45,8 @@ EVENT_PING_ROLE_ID = 1266199405187301406
 WAR_PING_ROLE_ID = 1268717495213101096
 RESTART_CHANNEL_ID = 1224860154864865280
 GALLOWS_CHANNEL_ID = 1233520545543487609
+MOD_LOG_ID = 1226684939844452422
+DCAR_ID = 1303150042512752731
 
 PROD = True
 
@@ -238,6 +240,29 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
         if len(embs) > 10:
             maxpages = math.ceil(len(embs)/10)
             await interaction.followup.send(f"{len(embs)} bans found on CCDB for **`{ckey}`**. Displaying page {min(page, maxpages)} of {maxpages}", embeds=(embs[(page-1)*10:page*10] if page <= maxpages else embs[(maxpages-1)*10:maxpages*10]), ephemeral=True if not public else False)
+    else:
+        await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
+
+@app_commands.checks.has_any_role(
+    342788067297329154,  # woof
+    1285058932473331733, # council
+    1224452065502429206, # mod
+    1231424937315536896, # jr mod
+    1228769833261207673, # coder
+    1284667472863301673, # sprite maint
+    1278651588864512000, # wiki lead
+    1229527478893154374, # staff spriter
+    1228408987125288960, # wiki writer
+)
+@app_commands.describe(discorduser="Discord User")
+@app_commands.describe(reason="Reason for restriction")
+@client.tree.command(description="Restrict a user's access to development channels.")
+async def dcar(interaction: discord.Interaction, discorduser: discord.User, reason: str):
+    await interaction.response.defer(ephemeral=True)
+    if PROD or interaction.guild.id == 342787099407155202:
+        await discorduser.add_roles(discord.Object(DCAR_ID))
+        await interaction.followup.send(f"{discorduser.mention}'s access to public development channels has been restricted.", ephemeral=True)
+        await client.get_channel(MOD_LOG_ID).send(f"Actioning user: {interaction.user.mention}\nActioned user: {discorduser.mention}\nReason:\n>>> {reason}")
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
