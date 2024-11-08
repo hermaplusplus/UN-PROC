@@ -427,14 +427,14 @@ async def register(interaction: discord.Interaction):
 #        return
 #    await interaction.response.send_modal(Rep())
 
-@client.tree.command(description="Generates a list of approved Ckeys.")
-async def playerdata(interaction:discord.Interaction):
-    if PROD or interaction.guild.id == 342787099407155202:
-        if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
-            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
-            return
-        os.system("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt")
-        await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:f>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
+#@client.tree.command(description="Generates a list of approved Ckeys.")
+#async def playerdata(interaction:discord.Interaction):
+#    if PROD or interaction.guild.id == 342787099407155202:
+#        if not ( (HIGH_STAFF_ROLE_ID in [r.id for r in interaction.user.roles]) or (OTHER_APPROVER_ROLE_ID in [r.id for r in interaction.user.roles]) ):
+#            await interaction.followup.send(f"Only {HIGH_STAFF_REFER} and {OTHER_APPROVER_REFER} can generate Ckey lists.", ephemeral=True)
+#            return
+#        os.system("csvtool format '%(2)\\n' accountlinks.csv > playerdata.txt")
+#        await interaction.response.send_message(content=f"Generated <t:{int((datetime.now()).timestamp())}:f>.", file=discord.File(open("playerdata.txt", 'rb'), filename="playerdata.txt"), ephemeral=True)
 
 """
 @client.tree.command(description="Toggle the server uptime ping role.")
