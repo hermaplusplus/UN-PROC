@@ -1,13 +1,19 @@
 import json
 import requests
 
+cf_headers = {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+}
+
 def hub2dict(game : str = "Exadv1/SpaceStation13") -> dict:
     """
     Converts current BYOND hub data to a dictionary.
     :param game: game to get the hub data for. e.g. "Exadv1/SpaceStation13"
     :return: dictionary mirroring the hub data.
     """
-    hub = requests.get(f"https://secure.byond.com/games/{game}?format=text")
+    hub = requests.get(f"https://secure.byond.com/games/{game}?format=text", headers=cf_headers)
     if hub.status_code != 200:
         raise Exception(f"byond2json: Failed to get hub data for {game}! Request returns {hub.status_code}")
     data = {}
@@ -77,7 +83,7 @@ def player2dict(player : str = "Exadv1") -> dict:
     :param player: player to get the data for. e.g. "Exadv1"
     :return: dictionary mirroring the player data.
     """
-    player = requests.get(f"https://secure.byond.com/members/{player}?format=text")
+    player = requests.get(f"https://secure.byond.com/members/{player}?format=text", headers=cf_headers)
     if player.status_code != 200:
         raise Exception(f"byond2json: Failed to get player data for {player}! Request returns {player.status_code}")
     data = {}
