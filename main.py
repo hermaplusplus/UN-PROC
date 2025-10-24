@@ -505,10 +505,10 @@ async def on_message(message):
         if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
             return
         await message.delete()
-    if message.channel.id == GALLOWS_CHANNEL_ID:
-        if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
-            return
-        await message.delete(delay=900)
+    #if message.channel.id == GALLOWS_CHANNEL_ID:
+    #    if HIGH_STAFF_ROLE_ID in [r.id for r in message.author.roles] or OTHER_APPROVER_ROLE_ID in [r.id for r in message.author.roles]:
+    #        return
+    #    await message.delete(delay=900)
     #await message.add_reaction("🗑️")
 
 @client.tree.error
@@ -521,7 +521,7 @@ async def on_app_command_error(interaction, error):
             status=discord.Status.dnd,
             activity=discord.Activity(
                 type=discord.ActivityType.playing,
-                name="Atom Smasher"
+                name="Outside the Palace"
             )
         )
         raise error
