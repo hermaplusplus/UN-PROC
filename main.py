@@ -26,25 +26,25 @@ SETTINGS = json.load(open("settings.json", "r"))
 
 from byond2json import player2dict as getPlayerData
 
-PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1169125844246069298)]
-#PRIORITY_GUILDS = [discord.Object(id=342787099407155202)]
-VERIFICATION_CHANNEL_ID = 1224863354590593087
+#PRIORITY_GUILDS = [discord.Object(id=342787099407155202), discord.Object(id=1382867109008248832)]
+PRIORITY_GUILDS = [discord.Object(id=1382867109008248832)]
+VERIFICATION_CHANNEL_ID = 1431401281599311882
 VERIFICATION_CHANNEL = discord.Object(id=VERIFICATION_CHANNEL_ID)
-VERIFICATION_QUEUE_ID = 1224860154864865280
+VERIFICATION_QUEUE_ID = 1431406355708772472
 VERIFICATION_QUEUE = discord.Object(id=VERIFICATION_QUEUE_ID)
-HIGH_STAFF_REFER = "Wizards"
-HIGH_STAFF_ROLE_ID = 1224447318342897664
-OTHER_APPROVER_REFER = "Server Moderators"
-OTHER_APPROVER_ROLE_ID = 1224452065502429206
-APPROVED_ROLE_ID = 1224852178435571774
-REJECT_ROLE_ID = 1233520171038019675
-REPORTS_CHANNEL_ID = 1224860186548895916
-UPTIME_PING_ROLE_ID = 1228522142526869614
-DEV_PING_ROLE_ID = 1254571363004321904
-EVENT_PING_ROLE_ID = 1266199405187301406
-WAR_PING_ROLE_ID = 1268717495213101096
-RESTART_CHANNEL_ID = 1224860154864865280
-GALLOWS_CHANNEL_ID = 1233520545543487609
+HIGH_STAFF_REFER = "Senior Admins"
+HIGH_STAFF_ROLE_ID = 1382868045914964058
+OTHER_APPROVER_REFER = "Admins"
+OTHER_APPROVER_ROLE_ID = 1382867897348784158
+APPROVED_ROLE_ID = 1382867109008248833
+REJECT_ROLE_ID = -1
+REPORTS_CHANNEL_ID = -1
+UPTIME_PING_ROLE_ID = -1
+DEV_PING_ROLE_ID = -1
+EVENT_PING_ROLE_ID = -1
+WAR_PING_ROLE_ID = -1
+RESTART_CHANNEL_ID = 1431406355708772472
+GALLOWS_CHANNEL_ID = -1
 MOD_LOG_ID = 1226684939844452422
 DCAR_ID = 1303150042512752731
 
@@ -54,9 +54,6 @@ HELP_MESSAGE = """
 **Commands:**
 `/help` shows this message.
 `/register` begins the registration process.
-`/report` submits a player report.
-`/toggleping` toggles the server uptime ping role.
-`/toggledevping` toggles the content update ping role.
 
 **FAQ:**
 
@@ -71,13 +68,10 @@ STAFF_HELP_MESSAGE = """
 **Commands:**
 `/help` shows this message.
 `/register` begins the registration process.
-`/report` submits a player report.
-`/toggleping` toggles the server uptime ping role.
 
 **Staff Commands:**
 `/lookup` shows some details of BYOND account by Ckey and its associated Discord user.
 `/ccdb` lists CCDB bans for a BYOND account by Ckey.
-`/playerdata` generates a list of approved Ckeys.
 
 **FAQ:**
 
@@ -114,7 +108,7 @@ async def on_ready():
     await client.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.playing,
-            name="Atom Smasher"
+            name="In the Palace"
         )
     )
     await client.get_channel(RESTART_CHANNEL_ID).send(":arrows_counterclockwise: **Bot restarted!** Any unprocessed registrations have been orphaned. Instruct applicants to reapply. Contact <@188796089380503555> for the manual approval process.", silent=True)
@@ -280,7 +274,7 @@ async def help(interaction:discord.Interaction):
         await interaction.response.send_message("This command isn't currently available in this server - check back later!", ephemeral=True)
 
 class Reg(ui.Modal, title="Registration"):
-    ckey     = ui.TextInput(label="What is your Ckey (BYOND username)?)",
+    ckey     = ui.TextInput(label="What is your Ckey (BYOND username)?",
                             style=discord.TextStyle.short,
                             placeholder="",
                             max_length=100)
@@ -288,19 +282,18 @@ class Reg(ui.Modal, title="Registration"):
                             style=discord.TextStyle.short,
                             placeholder="DD-MM-YYYY",
                             max_length=10)
-    origin   = ui.TextInput(label="How did you find SK? If invited, by who?",
+    origin   = ui.TextInput(label="Who were you invited by?",
                             style=discord.TextStyle.long,
                             placeholder="Specify the person who invited you, or where you found an invite.",
                             max_length=1000)
-    interest = ui.TextInput(label="Why do you want to join StoneKeep?",
+    history  = ui.TextInput(label="What servers have you played on previously?",
                             style=discord.TextStyle.long,
-                            placeholder="Short responses will be rejected. Aim for at least a paragraph.",
+                            placeholder="",
                             max_length=1000)
-    agreement    = ui.TextInput(label="Do you agree to abide by the rules?",
-                            style=discord.TextStyle.short,
-                            placeholder="Yes",
-                            min_length=3,
-                            max_length=3)
+    extras   = ui.TextInput(label="Additional questions:",
+                            style=discord.TextStyle.long,
+                            placeholder="Please enter your answers to the additional questions here.",
+                            max_length=1000)
 
     async def on_submit(self, interaction:discord.Interaction):
         try:
@@ -316,9 +309,9 @@ class Reg(ui.Modal, title="Registration"):
         emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
         emb.add_field(name="What is your date of birth? (DD-MM-YYYY)", value=f"Date 18 years ago: **{datetime.now().day:02}-{datetime.now().month:02}-{datetime.now().year-18:04}**\n```{self.dob.value}```", inline=False)
-        emb.add_field(name="How did you find SK? If invited, by who?", value=f"```{self.origin.value}```", inline=False)
-        emb.add_field(name="Why do you want to join StoneKeep?", value=f"```{self.interest.value}```", inline=False)
-        emb.add_field(name="Do you agree to abide by the rules?", value=f"```{self.agreement.value}```", inline=False)
+        emb.add_field(name="Who were you invited by?", value=f"```{self.origin.value}```", inline=False)
+        emb.add_field(name="What servers have you played on previously?", value=f"```{self.history.value}```", inline=False)
+        emb.add_field(name="Enter your answers to the additional questions here.", value=f"```{self.extras.value}```", inline=False)
         #emb.add_field(name='\u200b', value='``` ```')
         emb.add_field(name="Ckey Created", value=f"<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:d> (<t:{str(int(time.mktime(datetime.strptime(playerData['joined'], '%Y-%m-%d').timetuple())))}:R>)", inline=True)
         emb.add_field(name="Discord Created", value=f"<t:{int((interaction.user.created_at).timestamp())}:d> (<t:{int((interaction.user.created_at).timestamp())}:R>)", inline=True)
@@ -335,7 +328,7 @@ class Reg(ui.Modal, title="Registration"):
                     totalbans += 1
                 emb.add_field(name="CCDB Bans", value=f"[{activebans} active, {totalbans-activebans} expired bans found on CCDB.](https://centcom.melonmesa.com/viewer/view/{self.ckey.value.replace(' ', '%20')})", inline=False)
         #emb.set_footer(text=f"Date 18 years ago: <t:{int((datetime.now() - timedelta(days=18*365.24)).timestamp())}:d>")
-        await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.dob.value, self.origin.value, self.interest.value, self.agreement.value))
+        await client.get_channel(VERIFICATION_QUEUE_ID).send(embed=emb, view=Verification(interaction.user.id, self.ckey.value, self.dob.value, self.origin.value, self.history.value, self.extras.value))
 
 class Verification(ui.View):
     def __init__(self, uid, ckey, origin, experience, interest, agreement):
@@ -362,7 +355,7 @@ class Verification(ui.View):
         await interaction.followup.edit_message(interaction.message.id, view=self)
         os.system(f"echo {self.uid},{self.ckey} >> accountlinks.csv")
         try:
-            await u.send(f"✅ Your application for access to **StoneKeep** has been approved. This is your penance.")
+            await u.send(f"✅ Your application for access to **Shifting Roses** has been approved.")
             await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.")
         except:
             await interaction.followup.send(f"✅ <@{self.uid}>'s registration approved by {interaction.user.mention}.\n⚠️ Failed to DM <@{self.uid}> regarding their approval.")
@@ -382,7 +375,7 @@ class Verification(ui.View):
         self.remove_item(buttons[0])
         await interaction.followup.edit_message(interaction.message.id, view=self)
         try:
-            await u.send(f"⛔ Your application for access to **StoneKeep** has been rejected. Re-apply at a later time.")
+            await u.send(f"⛔ Your application for access to **Shifting Roses** has been rejected. Re-apply at a later time.")
             await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.")        
         except:
             await interaction.followup.send(f"⛔ <@{self.uid}>'s registration rejected by {interaction.user.mention}.\n⚠️ Failed to DM <@{self.uid}> regarding their rejection.")
@@ -392,51 +385,51 @@ class Verification(ui.View):
         #await u.add_roles(discord.Object(APPROVED_ROLE_ID))
         self.stop()
 
-class Rep(ui.Modal, title="Report"):
-    ckey = ui.TextInput(label="What is the player's Ckey (if known)?",
-                        style=discord.TextStyle.short,
-                        placeholder="",
-                        max_length=100,
-                        required=False)
-    char = ui.TextInput(label="What is the character's name (if known)?",
-                        style=discord.TextStyle.short,
-                        placeholder="",
-                        max_length=100,
-                        required=False)
-    disc = ui.TextInput(label="What is the player's Discord (if known)?",
-                        style=discord.TextStyle.short,
-                        placeholder="",
-                        max_length=100,
-                        required=False)
-    ridt = ui.TextInput(label="What is the round ID and/or time? (if known)",
-                        style=discord.TextStyle.short,
-                        placeholder="",
-                        max_length=200,
-                        required=False)
-    rson = ui.TextInput(label="What is the reason for the report?",
-                        style=discord.TextStyle.long,
-                        placeholder="Please be as detailed as possible. Use filehosts (NOT DISCORD!) for logs, screenshots, videos, etc.",
-                        max_length=1000)
-
-    async def on_submit(self, interaction:discord.Interaction):
-        reporterckey = "Unknown Ckey!"
-        with open('accountlinks.csv', 'r') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                if row[0] == str(interaction.user.id):
-                    reporterckey = f"`{row[1]}`"
-        embs = []
-        emb = discord.Embed()
-        emb.add_field(name="Reporter's Discord", value=f"{interaction.user.mention}", inline=True)
-        emb.add_field(name="Reporter's Ckey", value=f"{reporterckey}", inline=True)
-        emb.add_field(name="What is the player's Ckey (if known)?", value=(f"```{self.ckey.value}```" if self.ckey.value != "" else "No response."), inline=False)
-        emb.add_field(name="What is the character's name (if known)?", value=(f"```{self.char.value}```" if self.char.value != "" else "No response."), inline=False)
-        emb.add_field(name="What is the player's Discord (if known)?", value=(f"```{self.disc.value}```" if self.disc.value != "" else "No response."), inline=False)
-        emb.add_field(name="What is the round ID and/or time?", value=(f"```{self.ridt.value}```" if self.ridt.value != "" else "No response."), inline=False)
-        emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
-        #emb.add_field(name='\u200b', value='``` ```')
-        await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
-        await interaction.response.send_message("Your report has been successfully submitted.", ephemeral=True)
+#class Rep(ui.Modal, title="Report"):
+#    ckey = ui.TextInput(label="What is the player's Ckey (if known)?",
+#                        style=discord.TextStyle.short,
+#                        placeholder="",
+#                        max_length=100,
+#                        required=False)
+#    char = ui.TextInput(label="What is the character's name (if known)?",
+#                        style=discord.TextStyle.short,
+#                        placeholder="",
+#                        max_length=100,
+#                        required=False)
+#    disc = ui.TextInput(label="What is the player's Discord (if known)?",
+#                        style=discord.TextStyle.short,
+#                        placeholder="",
+#                        max_length=100,
+#                        required=False)
+#    ridt = ui.TextInput(label="What is the round ID and/or time? (if known)",
+#                        style=discord.TextStyle.short,
+#                        placeholder="",
+#                        max_length=200,
+#                        required=False)
+#    rson = ui.TextInput(label="What is the reason for the report?",
+#                        style=discord.TextStyle.long,
+#                        placeholder="Please be as detailed as possible. Use filehosts (NOT DISCORD!) for logs, screenshots, videos, etc.",
+#                        max_length=1000)
+#
+#    async def on_submit(self, interaction:discord.Interaction):
+#        reporterckey = "Unknown Ckey!"
+#        with open('accountlinks.csv', 'r') as file:
+#            reader = csv.reader(file)
+#            for row in reader:
+#                if row[0] == str(interaction.user.id):
+#                    reporterckey = f"`{row[1]}`"
+#        embs = []
+#        emb = discord.Embed()
+#        emb.add_field(name="Reporter's Discord", value=f"{interaction.user.mention}", inline=True)
+#        emb.add_field(name="Reporter's Ckey", value=f"{reporterckey}", inline=True)
+#        emb.add_field(name="What is the player's Ckey (if known)?", value=(f"```{self.ckey.value}```" if self.ckey.value != "" else "No response."), inline=False)
+#        emb.add_field(name="What is the character's name (if known)?", value=(f"```{self.char.value}```" if self.char.value != "" else "No response."), inline=False)
+#        emb.add_field(name="What is the player's Discord (if known)?", value=(f"```{self.disc.value}```" if self.disc.value != "" else "No response."), inline=False)
+#        emb.add_field(name="What is the round ID and/or time?", value=(f"```{self.ridt.value}```" if self.ridt.value != "" else "No response."), inline=False)
+#        emb.add_field(name="What is the reason for the report?", value=f"```{self.rson.value}```", inline=False)
+#        #emb.add_field(name='\u200b', value='``` ```')
+#        await client.get_channel(REPORTS_CHANNEL_ID).send(embed=emb)
+#        await interaction.response.send_message("Your report has been successfully submitted.", ephemeral=True)
 
 @client.tree.command(description="Fill out the registration form. This will be reviewed by staff.")
 async def register(interaction: discord.Interaction):
@@ -484,28 +477,28 @@ async def toggledevping(interaction:discord.Interaction):
         await interaction.response.send_message("You will no longer be pinged for content update announcements. 💤", ephemeral=True)
 """
 
-@client.tree.command(description="Toggle an optional role.")
-@app_commands.choices(role=[
-    app_commands.Choice(name='server uptime', value=0),
-    app_commands.Choice(name='content update', value=1),
-    app_commands.Choice(name='event', value=2),
-    app_commands.Choice(name='warmonger', value=3)
-])
-async def toggleping(interaction:discord.Interaction, role: int):
-    role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID, WAR_PING_ROLE_ID][role]
-    role_name = ["server uptime", "content update", "event", "warmonger"][role]
-    if role_id not in [r.id for r in interaction.user.roles]:
-        await interaction.user.add_roles(discord.Object(role_id))
-        await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
-    else:
-        await interaction.user.remove_roles(discord.Object(role_id))
-        await interaction.response.send_message(f"You will no longer be pinged for {role_name} announcements. 💤", ephemeral=True)
+#@client.tree.command(description="Toggle an optional role.")
+#@app_commands.choices(role=[
+#    app_commands.Choice(name='server uptime', value=0),
+#    app_commands.Choice(name='content update', value=1),
+#    app_commands.Choice(name='event', value=2),
+#    app_commands.Choice(name='warmonger', value=3)
+#])
+#async def toggleping(interaction:discord.Interaction, role: int):
+#    role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID, WAR_PING_ROLE_ID][role]
+#    role_name = ["server uptime", "content update", "event", "warmonger"][role]
+#    if role_id not in [r.id for r in interaction.user.roles]:
+#        await interaction.user.add_roles(discord.Object(role_id))
+#        await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
+#    else:
+#        await interaction.user.remove_roles(discord.Object(role_id))
+#        await interaction.response.send_message(f"You will no longer be pinged for {role_name} announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
-    if message.channel.id == 1237644625783554171:
-        if "byond://play.stonekeep.xyz:1337" in message.content:
-            await message.channel.send(file=discord.File(f"images/{random.randint(0, 28)}.png"))
+    #if message.channel.id == 1237644625783554171:
+    #    if "byond://play.stonekeep.xyz:1337" in message.content:
+    #        await message.channel.send(file=discord.File(f"images/{random.randint(0, 28)}.png"))
     if message.author == client.user:
         return
     if message.channel.id == VERIFICATION_CHANNEL_ID:
