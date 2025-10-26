@@ -48,6 +48,9 @@ GALLOWS_CHANNEL_ID = -1
 MOD_LOG_ID = 1226684939844452422
 DCAR_ID = 1303150042512752731
 
+MGMT_ROLE_ID = 1382867951061045378
+HOST_SPPT_ROLE_ID = 1424149066899787887
+
 PROD = True
 
 HELP_MESSAGE = """
@@ -115,8 +118,10 @@ async def on_ready():
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1224447318342897664, # admin
-    1231424937315536896  # mod
+    HIGH_STAFF_ROLE_ID,
+    OTHER_APPROVER_ROLE_ID,
+    MGMT_ROLE_ID,
+    HOST_SPPT_ROLE_ID
 )
 @app_commands.describe(ckey="BYOND Username")
 @app_commands.describe(discorduser="Discord User")
@@ -192,8 +197,10 @@ async def lookup(interaction: discord.Interaction, ckey: Optional[str], discordu
 
 @app_commands.checks.has_any_role(
     342788067297329154,  # woof
-    1224447318342897664, # admin
-    1231424937315536896  # mod
+    HIGH_STAFF_ROLE_ID,
+    OTHER_APPROVER_ROLE_ID,
+    MGMT_ROLE_ID,
+    HOST_SPPT_ROLE_ID
 )
 @app_commands.describe(ckey="BYOND Username")
 @app_commands.describe(page="Page Number")
@@ -237,31 +244,31 @@ async def ccdb(interaction: discord.Interaction, ckey: str, page: Optional[int] 
     else:
         await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
-@app_commands.checks.has_any_role(
-    342788067297329154,  # woof
-    1285058932473331733, # council
-    1224452065502429206, # mod
-    1231424937315536896, # jr mod
-    1228769833261207673, # coder
-    1284667472863301673, # sprite maint
-    1278651588864512000, # wiki lead
-    1229527478893154374, # staff spriter
-    1228408987125288960, # wiki writer
-)
-@app_commands.describe(discorduser="Discord User")
-@app_commands.describe(reason="Reason for restriction")
-@client.tree.command(description="Restrict a user's access to development channels.")
-async def dcar(interaction: discord.Interaction, discorduser: discord.User, reason: str):
-    await interaction.response.defer(ephemeral=True)
-    if PROD or interaction.guild.id == 342787099407155202:
-        if DCAR_ID in [r.id for r in discorduser.roles]:
-            await interaction.followup.send(f"{discorduser.mention}'s access has already been restricted.", ephemeral=True)
-        else:
-            await discorduser.add_roles(discord.Object(DCAR_ID))
-            await interaction.followup.send(f"{discorduser.mention}'s access to public development channels has been restricted.", ephemeral=True)
-            await client.get_channel(MOD_LOG_ID).send(f"**Developer Channel Access Restriction**\nActioning user: {interaction.user.mention}\nActioned user: {discorduser.mention}\nAction taken: Added DCAR role.\nReason:\n>>> {reason}")
-    else:
-        await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
+#@app_commands.checks.has_any_role(
+#    342788067297329154,  # woof
+#    1285058932473331733, # council
+#    1224452065502429206, # mod
+#    1231424937315536896, # jr mod
+#    1228769833261207673, # coder
+#    1284667472863301673, # sprite maint
+#    1278651588864512000, # wiki lead
+#    1229527478893154374, # staff spriter
+#    1228408987125288960, # wiki writer
+#)
+#@app_commands.describe(discorduser="Discord User")
+#@app_commands.describe(reason="Reason for restriction")
+#@client.tree.command(description="Restrict a user's access to development channels.")
+#async def dcar(interaction: discord.Interaction, discorduser: discord.User, reason: str):
+#    await interaction.response.defer(ephemeral=True)
+#    if PROD or interaction.guild.id == 342787099407155202:
+#        if DCAR_ID in [r.id for r in discorduser.roles]:
+#            await interaction.followup.send(f"{discorduser.mention}'s access has already been restricted.", ephemeral=True)
+#        else:
+#            await discorduser.add_roles(discord.Object(DCAR_ID))
+#            await interaction.followup.send(f"{discorduser.mention}'s access to public development channels has been restricted.", ephemeral=True)
+#            await client.get_channel(MOD_LOG_ID).send(f"**Developer Channel Access Restriction**\nActioning user: {interaction.user.mention}\nActioned user: {discorduser.mention}\nAction taken: Added DCAR role.\nReason:\n>>> {reason}")
+#    else:
+#        await interaction.followup.send("This command isn't currently available in this server - check back later!", ephemeral=True)
 
 @client.tree.command(description="Displays a list of commands and how to use the bot.")
 async def help(interaction:discord.Interaction):
