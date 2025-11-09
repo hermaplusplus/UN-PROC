@@ -285,9 +285,9 @@ class Reg(ui.Modal, title="Registration"):
                             style=discord.TextStyle.short,
                             placeholder="",
                             max_length=100)
-    dob      = ui.TextInput(label="What is your date of birth? (DD-MM-YYYY)",
+    dob      = ui.TextInput(label="What is your date of birth? (YYYY-MM-DD)",
                             style=discord.TextStyle.short,
-                            placeholder="DD-MM-YYYY",
+                            placeholder="YYYY-MM-DD",
                             max_length=10)
     origin   = ui.TextInput(label="Who were you invited by?",
                             style=discord.TextStyle.long,
@@ -315,7 +315,7 @@ class Reg(ui.Modal, title="Registration"):
         emb = discord.Embed()
         emb.add_field(name="Discord", value=f"{interaction.user.mention}", inline=True)
         emb.add_field(name="Ckey", value=f"`{playerData['ckey']}`", inline=True)
-        emb.add_field(name="What is your date of birth? (DD-MM-YYYY)", value=f"Date 18 years ago: **{datetime.now().day:02}-{datetime.now().month:02}-{datetime.now().year-18:04}**\n```{self.dob.value}```", inline=False)
+        emb.add_field(name="What is your date of birth? (YYYY-MM-DD)", value=f"Date 18 years ago: **{datetime.now().year-18:04}-{datetime.now().month:02}-{datetime.now().day:02}**\n```{self.dob.value}```", inline=False)
         emb.add_field(name="Who were you invited by?", value=f"```{self.origin.value}```", inline=False)
         emb.add_field(name="What servers have you played on previously?", value=f"```{self.history.value}```", inline=False)
         emb.add_field(name="Enter your answers to the additional questions here.", value=f"```{self.extras.value}```", inline=False)
