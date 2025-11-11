@@ -43,6 +43,9 @@ UPTIME_PING_ROLE_ID = -1
 DEV_PING_ROLE_ID = -1
 EVENT_PING_ROLE_ID = -1
 WAR_PING_ROLE_ID = -1
+CODEBASE_PING_ROLE_ID = 1437852822879342853
+UPDATE_PING_ROLE_ID = 1437851843526004786
+PLAYTEST_PING_ROLE_ID = 1437851899494924378
 RESTART_CHANNEL_ID = 1431406355708772472
 GALLOWS_CHANNEL_ID = -1
 MOD_LOG_ID = 1226684939844452422
@@ -484,22 +487,21 @@ async def toggledevping(interaction:discord.Interaction):
         await interaction.response.send_message("You will no longer be pinged for content update announcements. 💤", ephemeral=True)
 """
 
-#@client.tree.command(description="Toggle an optional role.")
-#@app_commands.choices(role=[
-#    app_commands.Choice(name='server uptime', value=0),
-#    app_commands.Choice(name='content update', value=1),
-#    app_commands.Choice(name='event', value=2),
-#    app_commands.Choice(name='warmonger', value=3)
-#])
-#async def toggleping(interaction:discord.Interaction, role: int):
-#    role_id = [UPTIME_PING_ROLE_ID, DEV_PING_ROLE_ID, EVENT_PING_ROLE_ID, WAR_PING_ROLE_ID][role]
-#    role_name = ["server uptime", "content update", "event", "warmonger"][role]
-#    if role_id not in [r.id for r in interaction.user.roles]:
-#        await interaction.user.add_roles(discord.Object(role_id))
-#        await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
-#    else:
-#        await interaction.user.remove_roles(discord.Object(role_id))
-#        await interaction.response.send_message(f"You will no longer be pinged for {role_name} announcements. 💤", ephemeral=True)
+@client.tree.command(description="Toggle an optional role.")
+@app_commands.choices(role=[
+    app_commands.Choice(name='codebase ping', value=0),
+    app_commands.Choice(name='update ping', value=1),
+    app_commands.Choice(name='playtest ping', value=2)
+])
+async def toggleping(interaction:discord.Interaction, role: int):
+    role_id = [CODEBASE_PING_ROLE_ID, UPDATE_PING_ROLE_ID, PLAYTEST_PING_ROLE_ID][role]
+    role_name = ["codebase", "update", "playtest"][role]
+    if role_id not in [r.id for r in interaction.user.roles]:
+        await interaction.user.add_roles(discord.Object(role_id))
+        await interaction.response.send_message(f"You will be pinged for {role_name} announcements! 🎺", ephemeral=True)
+    else:
+        await interaction.user.remove_roles(discord.Object(role_id))
+        await interaction.response.send_message(f"You will no longer be pinged for {role_name} announcements. 💤", ephemeral=True)
 
 @client.event
 async def on_message(message):
